@@ -5,9 +5,30 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form>
+    <ion-input
+      type="text"
+      label="Adresse e-mail"
+      placeholder="Adresse e-mail"
+      label-placement="floating"
+      fill="outline"
+      color="secondary"
+      [(ngModel)]="email"
+      name="email"
+      required
+    ></ion-input>
+    <ion-input
+      type="password"
+      label="Mot de passe"
+      placeholder="Mot de passe"
+      label-placement="floating"
+      fill="outline"
+      [(ngModel)]="password"
+      name="password"
+      required
+    ></ion-input>
+    <ion-button expand="block" color="secondary" type="submit"
+      >Submit</ion-button
+    >
+  </form>
 </ion-content>
