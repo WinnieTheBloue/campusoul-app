@@ -17,7 +17,4 @@ import { LoginPage } from './login.page';
   ],
   declarations: [LoginPage],
 })
-export class LoginPageModule {
-  email?: string;
-  password?: string;
-}
+export class LoginPageModule {}
