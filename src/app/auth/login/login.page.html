@@ -5,7 +5,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="form-container">
-    <form>
+    <form (submit)="login()">
       <ion-input
         type="text"
         label="Adresse e-mail"
