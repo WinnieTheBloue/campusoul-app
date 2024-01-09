@@ -1,34 +1,44 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="header">
+  <img src="assets/logo/Logo.png" alt="">
+</div>
 
-<ion-content [fullscreen]="true">
-  <form>
-    <ion-input
-      type="text"
-      label="Adresse e-mail"
-      placeholder="Adresse e-mail"
-      label-placement="floating"
-      fill="outline"
-      color="secondary"
-      [(ngModel)]="email"
-      name="email"
-      required
-    ></ion-input>
-    <ion-input
-      type="password"
-      label="Mot de passe"
-      placeholder="Mot de passe"
-      label-placement="floating"
-      fill="outline"
-      [(ngModel)]="password"
-      name="password"
-      required
-    ></ion-input>
-    <ion-button expand="block" color="secondary" type="submit"
-      >Submit</ion-button
-    >
-  </form>
+<ion-content [fullscreen]="true" >
+  <div class="form-container">
+    <form>
+      <ion-input
+        type="text"
+        label="Adresse e-mail"
+        placeholder="Adresse e-mail"
+        label-placement="floating"
+        fill="outline"
+        color="secondary"
+        [(ngModel)]="email"
+        name="email"
+        required
+      ></ion-input>
+      <ion-input
+        type="password"
+        label="Mot de passe"
+        placeholder="Mot de passe"
+        label-placement="floating"
+        fill="outline"
+        [(ngModel)]="password"
+        name="password"
+        required
+      ></ion-input>
+      <ion-input
+        type="password"
+        label="Confirmer mot de passe"
+        placeholder="Confirmer mot de passe"
+        label-placement="floating"
+        fill="outline"
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+        required
+      ></ion-input>
+      <ion-button expand="block" color="primary" type="submit"
+        >Suivant</ion-button
+      >
+    </form>
+  </div>
 </ion-content>

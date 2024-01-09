@@ -25,7 +25,34 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+.header {
+    width: 100%;
+    position: fixed;
+    z-index: 99;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+}
+.header img{
+    height: 60px;
+    object-fit: cover;
 
+}
 .red-background {
     --background: var(--ion-red-background);
+}
+
+.form-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6rem;
+    padding: 0 2rem;
+    // background-color: green;
+}
+ion-input {
+    margin-bottom: 2rem;
 }

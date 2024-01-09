@@ -1,10 +1,14 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>auth</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="header">
+  <img src="assets/logo/Logo.png" alt="" />
+</div>
 
-<ion-content [fullscreen]="true" class="red-background">
-  <ion-button color="secondary" routerLink="/auth/login" expand="block">Se connecter</ion-button>
-  <ion-button color="secondary" routerLink="/auth/register" expand="block">S'inscrire</ion-button>
+<ion-content [fullscreen]="true">
+  <div class="form-container">
+    <ion-button color="secondary" routerLink="/auth/login" expand="block"
+      >Se connecter</ion-button
+    >
+    <ion-button color="secondary" routerLink="/auth/register" expand="block"
+      >S'inscrire</ion-button
+    >
+  </div>
 </ion-content>
