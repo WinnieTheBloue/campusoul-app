@@ -1,13 +1,26 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>photos</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="header">
+  <img src="assets/logo/Logo.png" alt="" />
+</div>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">photos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="form-container">
+    <div class="photos-container">
+      <div class="photo" *ngFor="let photo of photos">
+          <ion-card class="inner">
+            <img [src]="photo.url" />
+          </ion-card>
+          <button class="close-icon"><ion-icon name="close" aria-hidden="true"></ion-icon></button>
+      </div>
+      <div class="photo" *ngIf="photos.length < 10">
+        <ion-card class="inner">
+          <button class="add"><ion-icon name="add" aria-hidden="true"></ion-icon></button>
+        </ion-card>
+      </div>
+      
+    </div>
+    <div class="photos-sum">{{ photos.length }}/10</div>
+    <ion-button expand="block" color="primary" type="submit"
+      >Enregistrer</ion-button
+    >
+  </div>
 </ion-content>

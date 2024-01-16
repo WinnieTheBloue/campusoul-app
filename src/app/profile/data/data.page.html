@@ -1,13 +1,62 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>data</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="header">
+  <img src="assets/logo/Logo.png" alt="" />
+</div>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">data</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-content [fullscreen]="true">
+    <div class="form-container">
+      <form>
+        <ion-input
+          type="text"
+          label="Nom"
+          placeholder="Nom"
+          label-placement="floating"
+          fill="outline"
+          color="secondary"
+          [(ngModel)]="profile.name"
+          name="name"
+          required
+        ></ion-input>
+
+        <ion-input
+          type="date"
+          label="Date de naissance"
+          placeholder="Date de naissance"
+          label-placement="floating"
+          fill="outline"
+          color="secondary"
+          [(ngModel)]="profile.birthdate"
+          name="birthdate"
+          required
+        ></ion-input>
+
+        <ion-input 
+          type="email"
+          label="Adresse email"
+          placeholder="Adresse email"
+          label-placement="floating"
+          fill="outline"
+          color="secondary"
+          [(ngModel)]="profile.email"
+          name="email"
+          required
+        ></ion-input>
+
+        <ion-textarea
+          label="Bio"
+          placeholder="Bio"
+          [autoGrow]="true"
+          label-placement="floating"
+          fill="outline"
+          [(ngModel)]="profile.bio"
+          name="bio"
+          required
+        ></ion-textarea>
+
+        <ion-button expand="block" color="primary" type="submit"
+          >Enregistrer</ion-button
+        >
+      </form>
+    </div>
+  </ion-content>
 </ion-content>
