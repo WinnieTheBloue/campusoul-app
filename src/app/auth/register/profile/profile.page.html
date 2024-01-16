@@ -1,13 +1,50 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>profile</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="header">
+  <img src="assets/logo/Logo.png" alt="" />
+</div>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-content [fullscreen]="true">
+    <div class="form-container">
+      <form>
+        <ion-input
+          type="text"
+          label="Nom"
+          placeholder="Nom"
+          label-placement="floating"
+          fill="outline"
+          color="secondary"
+          [(ngModel)]="name"
+          name="name"
+          required
+        ></ion-input>
+
+        <ion-input
+          type="date"
+          label="Date de naissance"
+          placeholder="Date de naissance"
+          label-placement="floating"
+          fill="outline"
+          color="secondary"
+          [(ngModel)]="birthdate"
+          name="birthdate"
+          required
+        ></ion-input>
+
+        <ion-textarea
+          label="Bio"
+          placeholder="Bio"
+          [autoGrow]="true"
+          label-placement="floating"
+          fill="outline"
+          [(ngModel)]="bio"
+          name="bio"
+          required
+        ></ion-textarea>
+
+        <ion-button expand="block" color="primary" type="submit"
+          >Suivant</ion-button
+        >
+      </form>
+    </div>
+  </ion-content>
 </ion-content>

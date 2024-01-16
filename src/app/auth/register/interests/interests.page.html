@@ -1,13 +1,20 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>interests</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="header">
+  <img src="assets/logo/Logo.png" alt="" />
+</div>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">interests</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="form-container">
+    <div class="interests-container">
+      <div *ngFor="let interest of interests">
+        <ion-chip [id]="interest.id" *ngIf="isSelected(interest)">
+          {{ interest.name }}
+        </ion-chip>
+        <ion-chip [id]="interest.id" [outline]="true" *ngIf="!isSelected(interest)">
+          {{ interest.name }}
+        </ion-chip>
+      </div>
+    </div>
+    <div class="interests-sum">{{ selectedInterests.length }}/3</div>
+    <ion-button expand="block" color="primary" type="submit">Suivant</ion-button>
+  </div>
 </ion-content>
