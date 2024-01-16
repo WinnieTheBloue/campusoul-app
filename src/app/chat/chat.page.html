@@ -1,13 +1,32 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>chat</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="header">
+  <img src="assets/logo/Logo.png" alt="" />
+</div>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">chat</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="chat-container">
+    <div class="match" *ngFor="let match of matches">
+      <div class="img-container">
+        <img [src]="match.img" alt="" />
+      </div>
+      <div class="infos">
+
+        <a href="chat/chatroom"  class="texts">
+          
+          <h2>{{match.name}}</h2>
+          <p>
+            <ion-icon
+              *ngIf="match.lastMsgSender == match.id"
+              name="return-up-forward-outline"
+            ></ion-icon>
+            {{match.lastMsg}}
+          </p>
+        </a>
+        <div class="options">
+          <ion-button expand="block" type="submit"
+            ><ion-icon name="ellipsis-horizontal-outline"></ion-icon
+          ></ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
