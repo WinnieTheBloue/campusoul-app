@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ProfilePageRoutingModule } from './profile-routing.module';
+import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { ProfilePage } from './profile.page';
 
@@ -13,6 +14,7 @@ import { ProfilePage } from './profile.page';
     CommonModule,
     FormsModule,
     IonicModule,
+    ExploreContainerComponentModule,
     ProfilePageRoutingModule
   ],
   declarations: [ProfilePage]
