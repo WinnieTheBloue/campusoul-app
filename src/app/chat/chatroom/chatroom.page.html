@@ -1,4 +1,4 @@
-<div class="chat-header">
+<!-- <div class="chat-header">
     <a href="tabs/chat" class="back">
       <ion-icon name="arrow-back-outline"></ion-icon>
       <div class="infos-wrapper">
@@ -10,7 +10,23 @@
         </a>
       </div>
     </a>
-</div>
+</div> -->
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="tabs/chat"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+        <a class="infos" href="chat/profile">
+          <div class="img-container">
+            <img [src]="match.img" alt="" />
+          </div>
+          <h2>{{match.name}}</h2>
+        </a>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="chat-container">
@@ -25,18 +41,18 @@
     </div>
   </div>
   <div class="input">
-      <ion-textarea
-        label="Message"
-        placeholder="Message"
-        [autoGrow]="true"
-        label-placement="floating"
-        fill="outline"
-        [(ngModel)]="message"
-        name="message"
-        required
-      ></ion-textarea>
-      <ion-button fill="clear" slot="end" (click)="sendMessage()"
-        ><ion-icon name="send-outline"></ion-icon
-      ></ion-button>
-    </div>
+    <ion-textarea
+      label="Message"
+      placeholder="Message"
+      [autoGrow]="true"
+      label-placement="floating"
+      fill="outline"
+      [(ngModel)]="message"
+      name="message"
+      required
+    ></ion-textarea>
+    <ion-button fill="clear" slot="end" (click)="sendMessage()"
+      ><ion-icon name="send-outline"></ion-icon
+    ></ion-button>
+  </div>
 </ion-content>
