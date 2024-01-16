@@ -1,0 +1,52 @@
+<div class="profile-container">
+  <img [src]="user.imgs[imgIndex].url" alt="" />
+  <div class="content">
+    <div class="profile-content">
+      <div class="img-index">
+        <div
+          *ngFor="let img of user.imgs; let i = index"
+          [ngClass]="{
+            'index-seen': i <= imgIndex,
+            'index-not-seen': i > imgIndex
+          }"
+        ></div>
+      </div>
+      <div class="buttons">
+        <ion-button
+          fill="clear"
+          slot="icon-only"
+          (click)="imgIndex = imgIndex - 1"
+          [disabled]="imgIndex == 0"
+        >
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="clear"
+          slot="icon-only"
+          (click)="imgIndex = imgIndex + 1"
+          [disabled]="imgIndex == user.imgs.length - 1"
+        >
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </div>
+      <div class="data">
+        <h2>{{ user.name }}, {{getAge(user.birthdate)}}</h2>
+        <p>{{user.bio}}</p>
+        <div class="interests">
+          <ion-chip *ngFor="let interest of user.interests" [outline]="true">
+            {{ interest.name }}
+          </ion-chip>
+        </div>
+        <div class="interaction" *ngIf="isDiscover">
+          <button class="discard">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </button>
+            <button class="like">
+              <ion-icon name="heart-circle-outline"></ion-icon>
+            </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

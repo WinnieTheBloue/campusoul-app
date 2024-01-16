@@ -1,0 +1,81 @@
+.profile-container {
+    width: 100%;
+    height: 100%;
+}
+
+.profile-container img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    
+}
+
+.profile-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.img-index {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 0.5rem;
+    padding: 1rem 1rem;
+}
+
+.index-seen {
+    width: 100%;
+    height: 5px;
+    border-radius: 0.5rem;
+    background-color: #e5e5e5;
+}
+
+.index-not-seen {
+    width: 100%;
+    height: 5px;
+    border-radius: 0.5rem;
+    background-color: #a0a0a0;
+}
+.buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+.data {
+    padding: 1rem 1rem;
+    background-color: rgba(0, 0, 0, 0.148);
+}
+.interaction {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 4rem;
+    padding-top: 1rem;
+}
+.interaction button {
+    font-size: 4rem;
+    background-color: transparent;
+}
+.like {
+    color: #2aba4b;
+
+}
+.discard {
+    color: #853f3f;
+}

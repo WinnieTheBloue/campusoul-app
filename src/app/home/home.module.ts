@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { ProfileComponentComponent } from '../components/profile-component/profile-component.component';
 
 import { HomePage } from './home.page';
 
@@ -13,7 +14,8 @@ import { HomePage } from './home.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    ProfileComponentComponent
   ],
   declarations: [HomePage]
 })
