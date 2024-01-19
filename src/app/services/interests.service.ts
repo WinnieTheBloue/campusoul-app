@@ -21,4 +21,11 @@ private apiUrl: string;
     });
     return this.http.get(`${this.apiUrl}/interests`, { headers });
   }
+
+  getInterest(id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+    return this.http.get(`${this.apiUrl}/interests/${id}`, { headers });
+  }
 }

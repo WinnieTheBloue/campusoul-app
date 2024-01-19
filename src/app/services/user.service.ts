@@ -1,4 +1,3 @@
-// user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -29,10 +28,10 @@ export class UserService {
     return this.http.patch(`${this.apiUrl}/users/${this.authService.getId()}`, profileData, { headers });
   }
 
-  getUserProfile(): Observable<any> {
+  getUserProfile(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    return this.http.get(`${this.apiUrl}/users/${this.authService.getId()}`, { headers });
+    return this.http.get(`${this.apiUrl}/users/${id}`, { headers });
   }
 }

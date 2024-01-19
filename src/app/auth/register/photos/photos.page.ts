@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PhotoService } from '../../../services/photo.service';
 import { UserService } from '../../../services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 interface Photo {
   id: string;
@@ -18,7 +19,7 @@ interface Photo {
 export class PhotosPage implements OnInit {
   photosIds: any[] = [];
   photos: Photo[] = [];
-  constructor(private photoService: PhotoService, private userService: UserService, private router: Router) { }
+  constructor(private photoService: PhotoService, private userService: UserService, private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
     this.loadUserPhotos();
@@ -28,7 +29,7 @@ export class PhotosPage implements OnInit {
   loadUserPhotos(): void {
     this.photosIds = []
     this.photos = []
-    this.userService.getUserProfile().subscribe(
+    this.userService.getUserProfile(this.authService.getId()).subscribe(
       (response) => {
         this.photosIds = response.user.images;
         this.photosIds.forEach(photo => {
@@ -46,7 +47,7 @@ export class PhotosPage implements OnInit {
       (response) => {
         const photo: Photo = {
           id: id,
-          url: response.url // Assurez-vous que response contient l'URL de la photo.
+          url: response.url 
         };
         this.photos.push(photo);
       },
