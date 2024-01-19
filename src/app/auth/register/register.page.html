@@ -1,10 +1,10 @@
 <div class="header">
-  <img src="assets/logo/Logo.png" alt="">
+  <img src="assets/logo/Logo.png" alt="" />
 </div>
 
-<ion-content [fullscreen]="true" >
+<ion-content [fullscreen]="true">
   <div class="form-container">
-    <form>
+    <form (submit)="register()">
       <ion-input
         type="text"
         label="Adresse e-mail"
@@ -40,5 +40,6 @@
         >Suivant</ion-button
       >
     </form>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>
 </ion-content>

@@ -5,7 +5,7 @@
 <ion-content [fullscreen]="true">
   <ion-content [fullscreen]="true">
     <div class="form-container">
-      <form>
+      <form (ngSubmit)="submitProfile()">
         <ion-input
           type="text"
           label="Nom"
@@ -38,6 +38,8 @@
           fill="outline"
           [(ngModel)]="bio"
           name="bio"
+          [counter]="true" 
+          maxlength="250"
           required
         ></ion-textarea>
 
