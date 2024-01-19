@@ -1,4 +1,4 @@
-// user.service.ts
+// photo.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,31 +8,36 @@ import { ApiService } from './api.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class PhotoService {
   private apiUrl: string; 
 
   constructor(private http: HttpClient, private authService: AuthService, private apiService: ApiService) { 
     this.apiUrl = apiService.getApiUrl();
   }
 
-  addInterestsToUser(interestId: string): Observable<any> {
+  uploadPhoto(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    return this.http.post(`${this.apiUrl}/users/interests`, { interestId }, { headers });
+
+    return this.http.post(`${this.apiUrl}/images`, formData, { headers });
   }
 
-  updateUserProfile(profileData: any): Observable<any> {
+  getPhoto(id: string): Observable<any> {
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    return this.http.patch(`${this.apiUrl}/users/${this.authService.getId()}`, profileData, { headers });
+    return this.http.get(`${this.apiUrl}/images/${id}`, { headers });
   }
 
-  getUserProfile(): Observable<any> {
+  deletePhoto(id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    return this.http.get(`${this.apiUrl}/users/${this.authService.getId()}`, { headers });
+    return this.http.delete(`${this.apiUrl}/images/${id}`, { headers, responseType: 'text' });
   }
 }

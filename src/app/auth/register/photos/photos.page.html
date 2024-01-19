@@ -6,20 +6,24 @@
   <div class="form-container">
     <div class="photos-container">
       <div class="photo" *ngFor="let photo of photos">
-          <ion-card class="inner">
-            <img [src]="photo.url" />
-          </ion-card>
-          <button class="close-icon"><ion-icon name="close" aria-hidden="true"></ion-icon></button>
+        <ion-card class="inner">
+          <img [src]="photo.url" />
+        </ion-card>
+        <button class="close-icon" (click)="deletePhoto(photo.id)">
+          <ion-icon name="close" aria-hidden="true"></ion-icon>
+        </button>
       </div>
       <div class="photo" *ngIf="photos.length < 10">
-        <ion-card class="inner">
-          <button class="add"><ion-icon name="add" aria-hidden="true"></ion-icon></button>
-        </ion-card>
+        <label class="add" for="file">
+          <ion-card class="inner">
+            <input class="input-file" id="file" type="file" (input)="newPhoto($event)" />
+            <ion-icon name="add" aria-hidden="true"></ion-icon>
+          </ion-card>
+        </label>
       </div>
-      
     </div>
     <div class="photos-sum">{{ photos.length }}/10</div>
-    <ion-button expand="block" color="primary" type="submit"
+    <ion-button expand="block" color="primary" type="submit" (click)="submitPhotos()"
       >Suivant</ion-button
     >
   </div>

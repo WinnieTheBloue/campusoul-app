@@ -22,7 +22,7 @@ export class ProfilePage implements OnInit {
 
   ngOnInit() {
     // Obtenez l'ID de l'utilisateur connecté
-    
+
   }
 
   submitProfile(): void {
@@ -31,16 +31,16 @@ export class ProfilePage implements OnInit {
       birthdate: this.birthdate,
       bio: this.bio
     };
-    
-      this.userService.updateUserProfile(profileData).subscribe(
-        (response) => {
-          console.log('Profil mis à jour avec succès:', response);
-          this.router.navigate(['/auth/register/interests']); // Rediriger après succès
-        },
-        (error) => {
-          console.error('Erreur lors de la mise à jour du profil:', error);
-        }
-      );
-    
+
+    this.userService.updateUserProfile(profileData).subscribe(
+      (response) => {
+        console.log('Profil mis à jour avec succès:', response);
+        this.router.navigate(['/auth/register/interests']); // Rediriger après succès
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour du profil:', error);
+      }
+    );
+
   }
 }
