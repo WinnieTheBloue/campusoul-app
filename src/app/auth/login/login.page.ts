@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +16,7 @@ export class LoginPage implements OnInit {
 
   apiUrl: string;
 
-  constructor(private http: HttpClient, private apiService: ApiService) { 
+  constructor(private http: HttpClient, private apiService: ApiService, private authService: AuthService, private router: Router) { 
     this.apiUrl = apiService.getApiUrl();
   }
 
@@ -33,6 +35,9 @@ export class LoginPage implements OnInit {
       (response) => {
         // Traitez la réponse de l'API ici
         console.log('Réponse de l\'API:', response);
+        this.authService.setId(response.user._id);
+        this.authService.setToken(response.token); 
+        this.router.navigate(['/tabs/home']);
       },
       (error) => {
         // Gérez les erreurs ici
