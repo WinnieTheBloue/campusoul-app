@@ -18,7 +18,7 @@
       <ion-back-button default-href="tabs/chat"></ion-back-button>
     </ion-buttons>
     <ion-title>
-        <a class="infos" href="chat/profile">
+        <a class="infos" [routerLink]="['/chat/profile', match.id]">
           <div class="img-container">
             <img [src]="match.img" alt="" />
           </div>

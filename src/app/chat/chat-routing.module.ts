@@ -16,7 +16,7 @@ const routes: Routes = [
     loadChildren: () => import('./chatroom/chatroom.module').then( m => m.ChatroomPageModule)
   },
   {
-    path: 'profile',
+    path: 'profile/:id',
     canActivate: [AuthGuard],
     loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
   }

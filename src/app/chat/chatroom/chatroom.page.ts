@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { MatchService } from 'src/app/services/match.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { PhotoService } from 'src/app/services/photo.service';
 
 @Component({
   selector: 'app-chatroom',
@@ -9,31 +11,57 @@ import { MessagesService } from 'src/app/services/messages.service';
   styleUrls: ['./chatroom.page.scss'],
 })
 export class ChatroomPage implements OnInit {
-  match: any = {
-    name: 'Megan Fox',
-    id: '1',
-    img: 'https://hips.hearstapps.com/hmg-prod/images/gettyimages-843456920.jpg',
-  }
+  match: any = {}
   message?: string;
-  matchid?: any
+  matchId?: any
   messages: any[] = []
   userId: any = '';
 
-  constructor(private route: ActivatedRoute, private messagesService: MessagesService, private authService: AuthService) { }
+  constructor(private route: ActivatedRoute, private messagesService: MessagesService, private authService: AuthService, private matchService: MatchService, private photoService: PhotoService) { }
 
   ngOnInit() {
     this.userId = this.authService.getId();
+
     this.route.params.subscribe(params => {
-      this.matchid = params['id']; 
+      this.matchId = params['id'];
     });
 
     this.loadMessages()
+    this.loadMatch()
   }
 
-  loadMessages() {
-    this.messagesService.getMessages(this.matchid).subscribe(
+  loadMatch() {
+    this.matchService.getMatch(this.matchId).subscribe(
+      async (response) => {
+        if (this.userId != response.users[0]._id) {
+          const img = await this.loadUserPhoto(response.users[0].images[0]);
+          this.match = {
+            name: response.users[0].name,
+            id: response.users[0]._id,
+            img: img,
+          }
+        }
+
+        if (this.userId != response.users[1]._id) {
+          const img = await this.loadUserPhoto(response.users[1].images[0]);
+          this.match = {
+            name: response.users[1].name,
+            id: response.users[1]._id,
+            img: img,
+          }
+
+        }
+
+      },
+      (error) => {
+        console.error('Erreur lors du chargement du match:', error);
+      }
+    );
+  }
+
+  async loadMessages() {
+    this.messagesService.getMessages(this.matchId).subscribe(
       (response) => {
-        console.log(response);
         this.messages = response;
       },
       (error) => {
@@ -42,18 +70,35 @@ export class ChatroomPage implements OnInit {
     );
   }
 
-  sendMessage() {
-    const body = {
-      matchId : this.matchid,
-      content: this.message
-    }
-    this.messagesService.sendMessage(body).subscribe(
+  
+loadUserPhoto(id: string): Promise < any > {
+  return new Promise((resolve, reject) => {
+    this.photoService.getPhoto(id).subscribe(
       (response) => {
-        this.loadMessages();
+        resolve(response.url);
       },
       (error) => {
-        console.error('Erreur lors de l\'envoi du message:', error);
+        console.error('Erreur lors du chargement des données utilisateur:', error);
+        reject(error);
       }
     );
+  });
+}
+
+sendMessage() {
+  if (!this.message) return console.error('Message vide')
+  const body = {
+    matchId: this.matchId,
+    content: this.message
   }
+  this.messagesService.sendMessage(body).subscribe(
+    (response) => {
+      this.loadMessages();
+      this.message = '';
+    },
+    (error) => {
+      console.error('Erreur lors de l\'envoi du message:', error);
+    }
+  );
+}
 }
