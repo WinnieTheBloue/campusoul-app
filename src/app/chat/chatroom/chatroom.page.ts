@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
   selector: 'app-chatroom',
@@ -12,60 +15,45 @@ export class ChatroomPage implements OnInit {
     img: 'https://hips.hearstapps.com/hmg-prod/images/gettyimages-843456920.jpg',
   }
   message?: string;
-  userId: string = '9';
-  messages: any[] = [
-    {
-      sender: '1',
-      msg: 'Hey, how are you?'
-    },
-    {
-      sender: '9',
-      msg: 'I\'m fine, thanks. And you?'
-    },
-    {
-      sender: '1',
-      msg: 'I\'m fine too, thanks for asking.'
-    },
-    {
-      sender: '9',
-      msg: 'So, what are you doing tonight?'
-    },
-    {
-      sender: '1',
-      msg: 'Nothing much, just watching TV. You?'
-    },
-    {
-      sender: '9',
-      msg: 'I\'m going to the movies with some friends.'
-    },
-    {
-      sender: '9',
-      msg: 'Do you want to come?'
-    },
-    {
-      sender: '1',
-      msg: 'Sure, why not?'
-    },
-    {
-      sender: '9',
-      msg: 'Great! I\'ll pick you up at 8.'
-    },
-    {
-      sender: '1',
-      msg: 'See you later.'
-    },
-    {
-      sender: '9',
-      msg: 'Bye.'
-    }
+  matchid?: any
+  messages: any[] = []
+  userId: any = '';
 
-  ]
-  constructor() { }
+  constructor(private route: ActivatedRoute, private messagesService: MessagesService, private authService: AuthService) { }
 
   ngOnInit() {
+    this.userId = this.authService.getId();
+    this.route.params.subscribe(params => {
+      this.matchid = params['id']; 
+    });
+
+    this.loadMessages()
+  }
+
+  loadMessages() {
+    this.messagesService.getMessages(this.matchid).subscribe(
+      (response) => {
+        console.log(response);
+        this.messages = response;
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des messages:', error);
+      }
+    );
   }
 
   sendMessage() {
-    console.log(this.message);
+    const body = {
+      matchId : this.matchid,
+      content: this.message
+    }
+    this.messagesService.sendMessage(body).subscribe(
+      (response) => {
+        this.loadMessages();
+      },
+      (error) => {
+        console.error('Erreur lors de l\'envoi du message:', error);
+      }
+    );
   }
 }

@@ -32,10 +32,10 @@
   <div class="chat-container">
     <div class="msgs" *ngFor="let msg of   messages">
       <div
-        [ngClass]="{'mg me': userId == msg.sender, 'msg other': userId != msg.sender}"
+        [ngClass]="{'mg me': userId != msg.receiver, 'msg other': userId == msg.receiver}"
       >
         <div class="msg-content">
-          <p>{{msg.msg}}</p>
+          <p>{{msg.content}}</p>
         </div>
       </div>
     </div>

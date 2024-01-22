@@ -10,7 +10,7 @@
       </div>
       <div class="infos">
 
-        <a href="chat/chatroom"  class="texts">
+        <a [routerLink]="['/chat/chatroom', match.matchId]"  class="texts">
           
           <h2>{{match.name}}</h2>
           <p>

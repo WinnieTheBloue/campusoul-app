@@ -11,7 +11,7 @@ const routes: Routes = [
     component: ChatPage
   },
   {
-    path: 'chatroom',
+    path: 'chatroom/:id',
     canActivate: [AuthGuard],
     loadChildren: () => import('./chatroom/chatroom.module').then( m => m.ChatroomPageModule)
   },
