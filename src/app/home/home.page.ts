@@ -39,7 +39,6 @@ export class HomePage implements OnInit {
       (response) => {
         this.users = response.users;
         this.userId = this.users[15]._id;
-        console.log(this.userId);
       },
       (error) => {
         console.error('Erreur lors du chargement des données utilisateur:', error);
