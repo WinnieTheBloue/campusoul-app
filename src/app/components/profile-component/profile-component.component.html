@@ -38,10 +38,10 @@
           </ion-chip>
         </div>
         <div class="interaction" *ngIf="isDiscover">
-          <button class="discard">
+          <button class="discard" (click)="dislikeUser()">
             <ion-icon name="close-circle-outline"></ion-icon>
           </button>
-            <button class="like">
+            <button class="like" (click)="likeUser()">
               <ion-icon name="heart-circle-outline"></ion-icon>
             </button>
         </div>

@@ -11,26 +11,7 @@ import { AuthService } from '../services/auth.service';
 export class HomePage implements OnInit {
 
   userId: any = ""
-  user: any = {
-    // name: "",
-    // birthdate: "",
-    // bio: "",
-    // imgs: [
-    //   { id: "1", url: "https://cache.cosmopolitan.fr/data/photo/w1000_c17/42/nicklas_pedersen_mister_world.jpg" },
-    //   { id: "2", url: "https://passimale.fr/wp-content/uploads/2022/05/beau-gosse-barbe.jpg" },
-    //   { id: "3", url: "https://www.boutik.jock.life/wp-content/uploads/2021/05/mug-beau-gosse-chien.jpg" },
-    //   { id: "4", url: "https://cache.cosmopolitan.fr/data/photo/w1000_c17/42/nicklas_pedersen_mister_world.jpg" },
-    //   { id: "5", url: "https://passimale.fr/wp-content/uploads/2022/05/beau-gosse-barbe.jpg" },
-    //   { id: "6", url: "https://www.boutik.jock.life/wp-content/uploads/2021/05/mug-beau-gosse-chien.jpg" }
-    // ],
-    // interests: [
-    //   { id: "1", name: "Sport" },
-    //   { id: "2", name: "Cinema" },
-    //   { id: "3", name: "Music" }
-    // ],
-    
-  }
-  users: any = {}
+  users: any = []
 
   constructor(private photoService: PhotoService, private userService: UserService, private authService: AuthService) { }
   ngOnInit() {
@@ -38,7 +19,7 @@ export class HomePage implements OnInit {
     this.userService.getAllUsers(1, 0, 0, 0).subscribe(
       (response) => {
         this.users = response.users;
-        this.userId = this.users[15]._id;
+        this.userId = this.users[0]._id;
       },
       (error) => {
         console.error('Erreur lors du chargement des données utilisateur:', error);
