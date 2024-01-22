@@ -30,7 +30,6 @@ export class ProfileComponentComponent  implements OnInit {
 
   ngOnInit() {
     this.loadUser();
-    console.log("User id" + this.userId);
   }
 
   loadUser() {
