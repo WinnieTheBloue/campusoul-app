@@ -34,4 +34,11 @@ export class UserService {
     });
     return this.http.get(`${this.apiUrl}/users/${id}`, { headers });
   }
+
+  getAllUsers(page: number, minAge: number, maxAge: number, maxDistance: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+    return this.http.get(`${this.apiUrl}/users?page=${page ? page : 1 }${minAge ? "&minAge=" + minAge : ""}${maxAge ? "&maxAge=" + maxAge : ""}${maxDistance ? "&maxDistance=" + maxDistance : ""}`, { headers });
+  }
 }

@@ -30,9 +30,21 @@ export class HomePage implements OnInit {
     // ],
     
   }
+  users: any = {}
+
   constructor(private photoService: PhotoService, private userService: UserService, private authService: AuthService) { }
   ngOnInit() {
-    this.userId = this.authService.getId();
+    // this.userId = this.authService.getId();
+    this.userService.getAllUsers(1, 0, 0, 0).subscribe(
+      (response) => {
+        this.users = response.users;
+        this.userId = this.users[15]._id;
+        console.log(this.userId);
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des données utilisateur:', error);
+      }
+    );
   }
   
 }
