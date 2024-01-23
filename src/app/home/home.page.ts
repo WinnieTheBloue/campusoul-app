@@ -35,7 +35,9 @@ export class HomePage implements OnInit {
   }
 
   loadUsers() {
-    console.log('Chargement des utilisateurs')
+    this.users = [];
+    this.userId = '';
+    this.noMoreUsers = false
     this.userService.getAllUsers(1, this.ageMin, this.ageMax, this.distanceMax).subscribe(
       (response) => {
         this.users = response.users;
@@ -46,6 +48,9 @@ export class HomePage implements OnInit {
       },
       (error) => {
         console.error('Erreur lors du chargement des données utilisateur:', error);
+        if(error.status == 404) {
+          this.noMoreUsers = true
+        }
       }
     );
   }

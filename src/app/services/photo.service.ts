@@ -6,6 +6,7 @@ import { ImagePicker } from '@awesome-cordova-plugins/image-picker/ngx';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ApiService } from './api.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'

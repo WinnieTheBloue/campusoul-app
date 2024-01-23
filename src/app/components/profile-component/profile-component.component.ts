@@ -54,6 +54,7 @@ export class ProfileComponentComponent implements OnInit {
         interests.forEach((interest: string) => {
           this.loadUserInterest(interest);
         });
+
       },
       (error) => {
         console.error(

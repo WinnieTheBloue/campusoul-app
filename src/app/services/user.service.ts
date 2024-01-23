@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ApiService } from './api.service';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Injectable({
   providedIn: 'root'
@@ -41,4 +42,30 @@ export class UserService {
     });
     return this.http.get(`${this.apiUrl}/users?page=${page ? page : 1 }${minAge ? "&minAge=" + minAge : ""}${maxAge ? "&maxAge=" + maxAge : ""}${maxDistance ? "&maxDistance=" + maxDistance : ""}`, { headers });
   }
+  
+  async updateUserPosition() {
+    try {
+      console.log('Updt pos')
+      const position = await Geolocation.getCurrentPosition();
+      const coordinates = [position.coords.longitude, position.coords.latitude]; // Assurez-vous de l'ordre [longitude, latitude]
+      const id = this.authService.getId();
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${this.authService.getToken()}`,
+        'Content-Type': 'application/json' // Assurez-vous d'avoir le bon type de contenu
+      });
+  
+      // Créer le corps de la requête
+      const body = {
+        type: 'Point', // Selon le modèle de données que vous avez dans votre backend
+        coordinates: coordinates
+      };
+  
+      // Effectuer la requête POST
+      return this.http.post(`${this.apiUrl}/users/location/${id}`, body, { headers }).toPromise();
+    } catch (error) {
+      console.error('Error updating user position', error);
+      return error;
+    }
+  }
+  
 }
