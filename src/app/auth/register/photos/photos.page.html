@@ -13,20 +13,23 @@
           <ion-icon name="close" aria-hidden="true"></ion-icon>
         </button>
       </div>
+
       <div class="photo" *ngIf="photos.length < 10">
-        <label class="add" for="file">
-          <ion-card class="inner">
-            <input class="input-file" id="file" type="file" accept="image/*" (input)="newPhoto($event)" />
+        <div class="add">
+          <ion-card class="inner" (click)="selectimageOptions()">
             <ion-icon name="add" aria-hidden="true"></ion-icon>
           </ion-card>
-        </label>
+        </div>
       </div>
     </div>
+
     <div class="photos-sum">{{ photos.length }}/10</div>
-    <ion-fab-button (click)="addPhotoToGallery()">
-      <ion-icon name="camera"></ion-icon>
-    </ion-fab-button>
-    <ion-button expand="block" color="primary" type="submit" (click)="submitPhotos()"
+
+    <ion-button
+      expand="block"
+      color="primary"
+      type="submit"
+      (click)="submitPhotos()"
       >Suivant</ion-button
     >
   </div>

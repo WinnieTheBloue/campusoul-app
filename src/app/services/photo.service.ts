@@ -1,8 +1,6 @@
 // photo.service.ts
 import { Injectable } from '@angular/core';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
-import { Filesystem, Directory } from '@capacitor/filesystem';
-import { Preferences } from '@capacitor/preferences';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -18,13 +16,15 @@ export class PhotoService {
     this.apiUrl = apiService.getApiUrl();
   }
 
-  async addNewToGallery() {
-    // Take a photo
+  async takeFromCamera() {
+
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
       quality: 100
     });
+
+    return capturedPhoto;
   }
 
   uploadPhoto(file: File): Observable<any> {
@@ -52,4 +52,25 @@ export class PhotoService {
     });
     return this.http.delete(`${this.apiUrl}/images/${id}`, { headers, responseType: 'text' });
   }
+
+  async selectImageFromGallery(): Promise<Photo> {
+    const image = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos, 
+      quality: 100
+    });
+
+    return image;
+  }
+
+  async uploadPhotoFromCamera(photo: Photo): Promise<Observable<any>> {
+    if (!photo.webPath) {
+      throw new Error('No photo path available');
+    }
+    const response = await fetch(photo.webPath!);
+    const blob = await response.blob();
+    const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+    return this.uploadPhoto(file);
+  }
+  
 }

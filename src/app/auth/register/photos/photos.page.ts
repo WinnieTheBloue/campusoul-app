@@ -2,6 +2,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ActionSheetController } from '@ionic/angular';
 import { PhotoService } from '../../../services/photo.service';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -19,14 +20,10 @@ interface PhotoUpld {
 export class PhotosPage implements OnInit {
   photosIds: any[] = [];
   photos: PhotoUpld[] = [];
-  constructor(private photoService: PhotoService, private userService: UserService, private router: Router, private authService: AuthService) { }
+  constructor(private actionSheet: ActionSheetController, public photoService: PhotoService, private userService: UserService, private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
     this.loadUserPhotos();
-  }
-
-  addPhotoToGallery() {
-    this.photoService.addNewToGallery();
   }
 
 
@@ -79,13 +76,70 @@ export class PhotosPage implements OnInit {
   deletePhoto(id: string): void {
     this.photoService.deletePhoto(id).subscribe(
       (response) => {
-        console.log('Photo supprimée avec succès:', response); // response sera une chaîne de caractères
-        this.loadUserPhotos(); // Recharger les photos pour mettre à jour l'affichage
+        console.log('Photo supprimée avec succès:', response); 
+        this.loadUserPhotos(); 
       },
       (error) => {
         console.error('Erreur lors de la suppression de la photo:', error);
       }
     );
+  }
+
+  async selectimageOptions() {
+    const actionSheet = await this.actionSheet.create({
+      header: 'Select Image Source',
+      buttons: [
+        {
+          text: 'Load from Gallery',
+          handler: async () => {
+            try {
+              const photo = await this.photoService.selectImageFromGallery();
+              if (photo) {
+                this.uploadPhotoFromCamera(photo);
+              }
+            } catch (error) {
+              console.error('Gallery error:', error);
+            }
+            console.log('Image Selected from Gallery');
+          }
+        },
+        {
+          text: 'Use Camera',
+          handler: async () => {
+            try {
+              const photo = await this.photoService.takeFromCamera();
+              if (photo) {
+                this.uploadPhotoFromCamera(photo);
+              }
+            } catch (error) {
+              console.error('Camera error:', error);
+            }
+            console.log('Camera Selected');
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  private uploadPhotoFromCamera(photo: any) {
+    this.photoService.uploadPhotoFromCamera(photo).then(observable => {
+      observable.subscribe(
+        (response) => {
+          console.log('Photo uploaded successfully:', response);
+          this.loadUserPhotos();
+        },
+        (error) => {
+          console.error('Error uploading photo:', error);
+        }
+      );
+    }).catch(error => {
+      console.error('Error in photo upload process:', error);
+    });
   }
 
   submitPhotos(): void {
