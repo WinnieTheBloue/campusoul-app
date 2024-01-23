@@ -1,5 +1,8 @@
 // photo.service.ts
 import { Injectable } from '@angular/core';
+import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Preferences } from '@capacitor/preferences';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -13,6 +16,15 @@ export class PhotoService {
 
   constructor(private http: HttpClient, private authService: AuthService, private apiService: ApiService) { 
     this.apiUrl = apiService.getApiUrl();
+  }
+
+  async addNewToGallery() {
+    // Take a photo
+    const capturedPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera,
+      quality: 100
+    });
   }
 
   uploadPhoto(file: File): Observable<any> {

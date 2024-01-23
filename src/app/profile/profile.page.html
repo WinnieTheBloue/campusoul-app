@@ -5,10 +5,10 @@
 <ion-content [fullscreen]="true" >
   <div class="person-profile">
     <div class="profile-photo">
-      <img [src]="profile.image" alt="">
+      <img [src]="profile.images[0].url" alt="">
     </div>
     <div class="profile-info">
-      <h1>{{profile.name}}, {{getAge(profile.birth)}}</h1>
+      <h1>{{profile.name}}, {{getAge(profile.birthdate)}}</h1>
     </div>
     <div class="links">
       <ion-button class="link-button" color="tertiary" routerLink="data" expand="block"
@@ -21,7 +21,7 @@
       ><div class="elements-container">Intérêts <ion-icon name="chevron-forward-outline"></ion-icon></div></ion-button
     >
     </div>
-    <ion-button expand="block" color="primary" type="submit" expand="block"
+    <ion-button expand="block" (click)="logout()" color="primary" type="submit" expand="block"
         >Déconnexion</ion-button
       >
   </div>

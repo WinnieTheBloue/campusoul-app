@@ -1,11 +1,11 @@
 // photos.page.ts
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PhotoService } from '../../../services/photo.service';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
-
-interface Photo {
+interface PhotoUpld {
   id: string;
   url: string;
 }
@@ -18,14 +18,18 @@ interface Photo {
 })
 export class PhotosPage implements OnInit {
   photosIds: any[] = [];
-  photos: Photo[] = [];
+  photos: PhotoUpld[] = [];
   constructor(private photoService: PhotoService, private userService: UserService, private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
     this.loadUserPhotos();
   }
 
-  
+  addPhotoToGallery() {
+    this.photoService.addNewToGallery();
+  }
+
+
   loadUserPhotos(): void {
     this.photosIds = []
     this.photos = []
@@ -41,13 +45,13 @@ export class PhotosPage implements OnInit {
       }
     );
   }
-  
+
   loadPhotoData(id: string): void {
     this.photoService.getPhoto(id).subscribe(
       (response) => {
-        const photo: Photo = {
+        const photo: PhotoUpld = {
           id: id,
-          url: response.url 
+          url: response.url
         };
         this.photos.push(photo);
       },
