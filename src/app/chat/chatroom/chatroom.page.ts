@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MatchService } from 'src/app/services/match.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { PhotoService } from 'src/app/services/photo.service';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-chatroom',
@@ -17,7 +18,7 @@ export class ChatroomPage implements OnInit {
   messages: any[] = []
   userId: any = '';
 
-  constructor(private route: ActivatedRoute, private messagesService: MessagesService, private authService: AuthService, private matchService: MatchService, private photoService: PhotoService) { }
+  constructor(private route: ActivatedRoute, private messagesService: MessagesService, private authService: AuthService, private matchService: MatchService, private photoService: PhotoService, private webSocketService: WebSocketService) { }
 
   ngOnInit() {
     this.userId = this.authService.getId();
@@ -28,6 +29,20 @@ export class ChatroomPage implements OnInit {
 
     this.loadMessages()
     this.loadMatch()
+
+    this.webSocketService.getMessages().subscribe((newMessage) => {
+      this.handleNewMessage(newMessage);
+    });
+  }
+  
+  handleNewMessage(newMessage: any) {
+    // Logique de traitement du nouveau message WebSocket
+    const newMessageMatchId = newMessage.newChatMessage.match;
+    if (newMessageMatchId !== this.matchId) return;
+    this.loadMessages();
+    // Vous pouvez mettre en œuvre la logique pour ajouter le nouveau message à votre liste existante
+    // Exemple:
+    this.messages.push(newMessage);
   }
 
   loadMatch() {
