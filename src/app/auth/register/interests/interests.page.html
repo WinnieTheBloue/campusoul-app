@@ -1,9 +1,11 @@
-<div class="header">
+<ion-header>
   <img src="assets/logo/Logo.png" alt="" />
-</div>
+</ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="form-container">
+
+<ion-content [fullscreen]="true" class="red">
+    <div class="buttons-group">
+    <h1>Inscription</h1>
     <div class="interests-container">
       <div *ngFor="let interest of interests">
         <ion-chip [id]="interest.id" (click)="toggleInterest(interest)" *ngIf="isSelected(interest)">

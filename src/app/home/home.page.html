@@ -1,7 +1,74 @@
+<ion-header class="dark">
+  <img src="assets/logo/Logo.png" alt="" />
+  <ion-button id="open-modal">
+    <ion-icon name="options-outline"></ion-icon>
+  </ion-button>
+</ion-header>
+
 <ion-content [fullscreen]="true">
-  <app-profile-component *ngIf="userId" [userId]="userId" [users]="users" [isDiscover]="true"></app-profile-component>
+  <app-profile-component
+    *ngIf="userId"
+    [userId]="userId"
+    [users]="users"
+    [isDiscover]="true"
+  ></app-profile-component>
   <div class="endlist" *ngIf="noMoreUsers">
     <h1>Vous avez parcouru tous les profils disponibles...</h1>
     <h2>Revenez plus tard pour découvrir de nouveaux profils !</h2>
   </div>
+
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Annuler</ion-button>
+          </ion-buttons>
+          <ion-title>Welcome</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" [strong]="true"
+              >Confirmer</ion-button
+            >
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="buttons-group">
+          <ion-input
+            type="number"
+            label="Âge minimal"
+            placeholder="Âge minimal"
+            label-placement="floating"
+            fill="outline"
+            color="secondary"
+            name="ageMin"
+            [(ngModel)]="ageMin"
+            required
+          ></ion-input>
+          <ion-input
+            type="number"
+            label="Âge maximal"
+            placeholder="Âge maximal"
+            label-placement="floating"
+            fill="outline"
+            color="secondary"
+            name="ageMax"
+            [(ngModel)]="ageMax"
+            required
+          ></ion-input>
+          <ion-range
+            (ionChange)="onRangeChange($event)"
+            [min]="5"
+            [max]="100"
+            labelPlacement="stacked"
+            label="Distance max"
+            [pin]="true"
+            [pinFormatter]="pinFormatter"
+            name="distanceMax"
+            [ngModel]="distanceMax"
+          ></ion-range>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

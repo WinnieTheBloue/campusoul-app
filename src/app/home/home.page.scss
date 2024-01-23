@@ -15,3 +15,11 @@ h1 {
 h2 {
     text-align: center;
 }
+ion-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+ion-header ion-button {
+    --background: #fff0;
+}

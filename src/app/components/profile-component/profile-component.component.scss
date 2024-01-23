@@ -7,6 +7,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
+    max-height: calc(100% - 70px);
     object-fit: cover;
     z-index: -1;
 }
@@ -16,7 +17,7 @@
     z-index: 1;
     height: 100%;
     width: 100%;
-    
+
 }
 
 .profile-content {
@@ -49,6 +50,7 @@
     border-radius: 0.5rem;
     background-color: #a0a0a0;
 }
+
 .buttons {
     width: 100%;
     display: flex;
@@ -56,10 +58,18 @@
     justify-content: space-between;
 
 }
+
 .data {
     padding: 1rem 1rem;
-    background-color: rgba(0, 0, 0, 0.148);
+    background: rgb(0, 0, 0);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    color: #fff;
 }
+.data ion-chip {
+    color: #fff;
+    border-color: #fff;
+}
+
 .interaction {
     width: 100%;
     display: flex;
@@ -68,14 +78,17 @@
     gap: 4rem;
     padding-top: 1rem;
 }
+
 .interaction button {
     font-size: 4rem;
     background-color: transparent;
 }
+
 .like {
     color: #2aba4b;
 
 }
+
 .discard {
     color: #853f3f;
 }
