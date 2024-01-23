@@ -16,7 +16,7 @@
       <div class="photo" *ngIf="photos.length < 10">
         <label class="add" for="file">
           <ion-card class="inner">
-            <input class="input-file" id="file" type="file" (input)="newPhoto($event)" />
+            <input class="input-file" id="file" type="file" accept="image/*" (input)="newPhoto($event)" />
             <ion-icon name="add" aria-hidden="true"></ion-icon>
           </ion-card>
         </label>
