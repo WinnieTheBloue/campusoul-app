@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +16,7 @@ export class ProfilePage implements OnInit {
     image: 'https://cache.cosmopolitan.fr/data/photo/w1000_c17/42/nicklas_pedersen_mister_world.jpg',
     birth: '1990-02-19'
   }
-  constructor() { }
+  constructor(private authServie: AuthService) { }
 
   ngOnInit() {
   }
@@ -29,6 +30,10 @@ export class ProfilePage implements OnInit {
       age--;
     }
     return age;
+  }
+
+  logout() {
+    this.authServie.logout();
   }
 
 }

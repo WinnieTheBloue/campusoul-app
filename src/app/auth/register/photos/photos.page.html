@@ -23,6 +23,9 @@
       </div>
     </div>
     <div class="photos-sum">{{ photos.length }}/10</div>
+    <ion-fab-button (click)="addPhotoToGallery()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
     <ion-button expand="block" color="primary" type="submit" (click)="submitPhotos()"
       >Suivant</ion-button
     >
