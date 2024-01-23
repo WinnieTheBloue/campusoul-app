@@ -17,6 +17,7 @@ interface Interest {
 export class InterestsPage implements OnInit {
   interests: Interest[] = [];
   selectedInterests: Interest[] = [];
+  oldInterests: Interest[] = [];
   selectedSum?: number = 0;
   userId: any = this.authservice.getId();
  
@@ -33,6 +34,9 @@ export class InterestsPage implements OnInit {
           id: data.user.interests[index]
         }));
         this.selectedSum = this.selectedInterests.length;
+        this.oldInterests = data.user.interests.map((interest: any, index: any) => ({
+          id: data.user.interests[index]
+        }));
       
         console.log('Intérêts sélectionnés:', this.selectedInterests);
       },
@@ -78,7 +82,16 @@ export class InterestsPage implements OnInit {
 
   submitInterests(): void {
     const selectedInterestIds = this.selectedInterests.map(interest => interest.id);
-    
+    this.oldInterests.forEach(interest => {
+      this.interestsService.deleteUserInterest(interest.id).subscribe(
+        (data) => {
+          console.log('Intérêts supprimés avec succès:', data);
+        },
+        (error) => {
+          console.error('Erreur lors de la suppression des intérêts:', error);
+        }
+      );
+    });
     selectedInterestIds.forEach(interestId => {
       this.userService.addInterestsToUser(interestId).subscribe(
         (response) => {
@@ -89,7 +102,5 @@ export class InterestsPage implements OnInit {
         }
       );
     });
-
-    this.router.navigate(['/auth/register/photos']);
   }
 }
