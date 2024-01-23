@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ImagePicker } from '@awesome-cordova-plugins/image-picker/ngx';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ApiService } from './api.service';
@@ -10,9 +11,9 @@ import { ApiService } from './api.service';
   providedIn: 'root'
 })
 export class PhotoService {
-  private apiUrl: string; 
+  private apiUrl: string;
 
-  constructor(private http: HttpClient, private authService: AuthService, private apiService: ApiService) { 
+  constructor(private http: HttpClient, private imagePicker: ImagePicker, private authService: AuthService, private apiService: ApiService) {
     this.apiUrl = apiService.getApiUrl();
   }
 
@@ -53,24 +54,27 @@ export class PhotoService {
     return this.http.delete(`${this.apiUrl}/images/${id}`, { headers, responseType: 'text' });
   }
 
-  async selectImageFromGallery(): Promise<Photo> {
-    const image = await Camera.getPhoto({
+  async selectImageFromGallery() {
+    const selectedImage = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Photos, 
       quality: 100
     });
 
-    return image;
+    return selectedImage;
   }
 
   async uploadPhotoFromCamera(photo: Photo): Promise<Observable<any>> {
-    if (!photo.webPath) {
+    const photoPath = photo.path || photo.webPath || photo;
+
+    if (!photoPath) {
       throw new Error('No photo path available');
     }
+
     const response = await fetch(photo.webPath!);
     const blob = await response.blob();
     const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
     return this.uploadPhoto(file);
   }
-  
+
 }

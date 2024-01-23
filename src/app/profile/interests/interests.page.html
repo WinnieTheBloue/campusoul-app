@@ -6,15 +6,15 @@
   <div class="form-container">
     <div class="interests-container">
       <div *ngFor="let interest of interests">
-        <ion-chip [id]="interest.id" *ngIf="isSelected(interest)">
+        <ion-chip (click)="toggleInterest(interest)" [id]="interest.id" *ngIf="isSelected(interest)">
           {{ interest.name }}
         </ion-chip>
-        <ion-chip [id]="interest.id" [outline]="true" *ngIf="!isSelected(interest)">
+        <ion-chip (click)="toggleInterest(interest)" [id]="interest.id" [outline]="true" *ngIf="!isSelected(interest)">
           {{ interest.name }}
         </ion-chip>
       </div>
     </div>
     <div class="interests-sum">{{ selectedInterests.length }}/3</div>
-    <ion-button expand="block" color="primary" type="submit">Enregistrer</ion-button>
+    <ion-button (click)="submitInterests()" expand="block" color="primary" type="submit">Enregistrer</ion-button>
   </div>
 </ion-content>

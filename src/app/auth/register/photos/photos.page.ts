@@ -1,5 +1,3 @@
-// photos.page.ts
-
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
@@ -87,10 +85,10 @@ export class PhotosPage implements OnInit {
 
   async selectimageOptions() {
     const actionSheet = await this.actionSheet.create({
-      header: 'Select Image Source',
+      header: 'Selectionner un image',
       buttons: [
         {
-          text: 'Load from Gallery',
+          text: 'Charger depuis la galerie',
           handler: async () => {
             try {
               const photo = await this.photoService.selectImageFromGallery();
@@ -104,7 +102,7 @@ export class PhotosPage implements OnInit {
           }
         },
         {
-          text: 'Use Camera',
+          text: 'Utiliser la caméra',
           handler: async () => {
             try {
               const photo = await this.photoService.takeFromCamera();
@@ -118,7 +116,7 @@ export class PhotosPage implements OnInit {
           }
         },
         {
-          text: 'Cancel',
+          text: 'Annuler',
           role: 'cancel'
         }
       ]
