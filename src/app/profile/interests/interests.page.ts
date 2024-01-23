@@ -3,6 +3,8 @@ import { InterestsService } from '../../services/interests.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { forkJoin } from 'rxjs';
+
 
 interface Interest {
   id: string;
@@ -20,7 +22,7 @@ export class InterestsPage implements OnInit {
   oldInterests: Interest[] = [];
   selectedSum?: number = 0;
   userId: any = this.authservice.getId();
- 
+
 
   constructor(private interestsService: InterestsService, private userService: UserService, private router: Router, private authservice: AuthService) { }
 
@@ -37,7 +39,7 @@ export class InterestsPage implements OnInit {
         this.oldInterests = data.user.interests.map((interest: any, index: any) => ({
           id: data.user.interests[index]
         }));
-      
+
         console.log('Intérêts sélectionnés:', this.selectedInterests);
       },
       (error) => {
@@ -82,25 +84,39 @@ export class InterestsPage implements OnInit {
 
   submitInterests(): void {
     const selectedInterestIds = this.selectedInterests.map(interest => interest.id);
-    this.oldInterests.forEach(interest => {
-      this.interestsService.deleteUserInterest(interest.id).subscribe(
-        (data) => {
-          console.log('Intérêts supprimés avec succès:', data);
-        },
-        (error) => {
-          console.error('Erreur lors de la suppression des intérêts:', error);
-        }
-      );
+    
+    // Créer un tableau pour stocker les Observables des requêtes de suppression
+    const deleteInterestObservables: any[] = this.oldInterests.map(interest => {
+      return this.interestsService.deleteUserInterest(interest.id);
     });
-    selectedInterestIds.forEach(interestId => {
-      this.userService.addInterestsToUser(interestId).subscribe(
-        (response) => {
-          console.log('Intérêts ajoutés avec succès:', response);
-        },
-        (error) => {
-          console.error('Erreur lors de l\'ajout des intérêts:', error);
-        }
-      );
-    });
+  
+    // Utiliser forkJoin pour souscrire à tous les Observables de suppression simultanément
+    forkJoin(deleteInterestObservables).subscribe(
+      (deleteResponses) => {
+        console.log('Tous les intérêts ont été supprimés avec succès:', deleteResponses);
+  
+        // Tous les intérêts sont maintenant supprimés, commencer l'ajout des nouveaux intérêts
+        const addInterestObservables: any[] = selectedInterestIds.map(interestId => {
+          return this.userService.addInterestsToUser(interestId);
+        });
+  
+        // Utiliser forkJoin pour souscrire à tous les Observables d'ajout simultanément
+        forkJoin(addInterestObservables).subscribe(
+          (addResponses) => {
+            // Toutes les requêtes d'ajout sont terminées ici
+            console.log('Tous les intérêts ont été ajoutés avec succès:', addResponses);
+            // Redirection après que tous les intérêts sont ajoutés
+            this.router.navigate(['/tabs/profile']);
+          },
+          (addError) => {
+            console.error('Une erreur est survenue lors de l\'ajout des intérêts:', addError);
+          }
+        );
+      },
+      (deleteError) => {
+        console.error('Une erreur est survenue lors de la suppression des intérêts:', deleteError);
+      }
+    );
   }
+  
 }
