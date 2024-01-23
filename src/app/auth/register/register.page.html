@@ -1,44 +1,47 @@
-<div class="header">
+<ion-header>
   <img src="assets/logo/Logo.png" alt="" />
-</div>
+</ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="red">
   <div class="form-container">
     <form (submit)="register()">
-      <ion-input
-        type="text"
-        label="Adresse e-mail"
-        placeholder="Adresse e-mail"
-        label-placement="floating"
-        fill="outline"
-        color="secondary"
-        [(ngModel)]="email"
-        name="email"
-        required
-      ></ion-input>
-      <ion-input
-        type="password"
-        label="Mot de passe"
-        placeholder="Mot de passe"
-        label-placement="floating"
-        fill="outline"
-        [(ngModel)]="password"
-        name="password"
-        required
-      ></ion-input>
-      <ion-input
-        type="password"
-        label="Confirmer mot de passe"
-        placeholder="Confirmer mot de passe"
-        label-placement="floating"
-        fill="outline"
-        [(ngModel)]="confirmPassword"
-        name="confirmPassword"
-        required
-      ></ion-input>
-      <ion-button expand="block" color="primary" type="submit"
-        >Suivant</ion-button
-      >
+      <div class="buttons-group">
+        <h1>Inscription</h1>
+          <ion-input
+            type="text"
+            label="Adresse e-mail"
+            placeholder="Adresse e-mail"
+            label-placement="floating"
+            fill="outline"
+            color="secondary"
+            [(ngModel)]="email"
+            name="email"
+            required
+          ></ion-input>
+          <ion-input
+            type="password"
+            label="Mot de passe"
+            placeholder="Mot de passe"
+            label-placement="floating"
+            fill="outline"
+            [(ngModel)]="password"
+            name="password"
+            required
+          ></ion-input>
+          <ion-input
+            type="password"
+            label="Confirmer mot de passe"
+            placeholder="Confirmer mot de passe"
+            label-placement="floating"
+            fill="outline"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            required
+          ></ion-input>
+        <ion-button expand="block" color="primary" type="submit"
+          >Suivant</ion-button
+        >
+      </div>
     </form>
     <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>

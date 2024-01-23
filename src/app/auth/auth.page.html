@@ -1,14 +1,12 @@
-<div class="header">
-  <img src="assets/logo/Logo.png" alt="" />
-</div>
-
-<ion-content [fullscreen]="true">
-  <div class="form-container">
-    <ion-button color="secondary" routerLink="/auth/login" expand="block"
-      >Se connecter</ion-button
-    >
-    <ion-button color="secondary" routerLink="/auth/register" expand="block"
-      >S'inscrire</ion-button
-    >
-  </div>
+<ion-content [fullscreen]="true" class="red">
+    <div class="buttons-group">
+      <img src="assets/logo/Logo.png" alt="" />
+      <p>By clicking “Log in”, you agree with our Terms. Learn how we process your data in our Privacy Policy and Cookies Policy.</p>
+      <ion-button color="secondary" routerLink="/auth/login" expand="block"
+        >Se connecter</ion-button
+      >
+      <ion-button color="secondary" routerLink="/auth/register" expand="block"
+        >S'inscrire</ion-button
+      >
+    </div>
 </ion-content>

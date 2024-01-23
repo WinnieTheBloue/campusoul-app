@@ -1,5 +1,10 @@
 ion-chip {
     width: fit-content;
+    --color: #fff;
+}
+h1 {
+    color: #fff;
+
 }
 .interests-container {
     display: flex;
@@ -11,4 +16,7 @@ ion-chip {
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+.interests-sum {
+    color: #fff;
 }
