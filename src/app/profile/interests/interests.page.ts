@@ -85,27 +85,21 @@ export class InterestsPage implements OnInit {
   submitInterests(): void {
     const selectedInterestIds = this.selectedInterests.map(interest => interest.id);
     
-    // Créer un tableau pour stocker les Observables des requêtes de suppression
     const deleteInterestObservables: any[] = this.oldInterests.map(interest => {
       return this.interestsService.deleteUserInterest(interest.id);
     });
   
-    // Utiliser forkJoin pour souscrire à tous les Observables de suppression simultanément
     forkJoin(deleteInterestObservables).subscribe(
       (deleteResponses) => {
         console.log('Tous les intérêts ont été supprimés avec succès:', deleteResponses);
   
-        // Tous les intérêts sont maintenant supprimés, commencer l'ajout des nouveaux intérêts
         const addInterestObservables: any[] = selectedInterestIds.map(interestId => {
           return this.userService.addInterestsToUser(interestId);
         });
   
-        // Utiliser forkJoin pour souscrire à tous les Observables d'ajout simultanément
         forkJoin(addInterestObservables).subscribe(
           (addResponses) => {
-            // Toutes les requêtes d'ajout sont terminées ici
             console.log('Tous les intérêts ont été ajoutés avec succès:', addResponses);
-            // Redirection après que tous les intérêts sont ajoutés
             this.router.navigate(['/tabs/profile']);
           },
           (addError) => {
