@@ -12,6 +12,8 @@ export class HomePage implements OnInit {
 
   userId: any = ""
   users: any = []
+  noMoreUsers: boolean = false
+
 
   constructor(private photoService: PhotoService, private userService: UserService, private authService: AuthService) { }
   ngOnInit() {
@@ -25,6 +27,9 @@ export class HomePage implements OnInit {
         console.error('Erreur lors du chargement des données utilisateur:', error);
       }
     );
+    if(this.users.length == 0){
+      this.noMoreUsers = true
+    }
   }
   
 }

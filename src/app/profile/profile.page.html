@@ -4,7 +4,7 @@
 
 <ion-content [fullscreen]="true" >
   <div class="person-profile">
-    <div class="profile-photo">
+    <div class="profile-photo" *ngIf="profile.images && profile.images.length > 0">
       <img [src]="profile.images[0].url" alt="">
     </div>
     <div class="profile-info">

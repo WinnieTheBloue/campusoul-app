@@ -1,0 +1,17 @@
+.endlist {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 10%;
+}
+
+h1 {
+    color: var(--ion-color-primary);
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}

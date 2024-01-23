@@ -1,9 +1,13 @@
-<div class="header">
-  <img src="assets/logo/Logo.png" alt="" />
-</div>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="tabs/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Informations personnelles</ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-content [fullscreen]="true">
     <div class="form-container">
       <form (submit)="updateProfile()">
         <ion-input
@@ -58,5 +62,4 @@
         >
       </form>
     </div>
-  </ion-content>
 </ion-content>

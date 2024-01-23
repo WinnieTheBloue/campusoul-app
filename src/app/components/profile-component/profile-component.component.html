@@ -1,4 +1,4 @@
-<div class="profile-container">
+<div class="profile-container" *ngIf="user && user.images && user.images.length > 0 && imgIndex >= 0 && imgIndex < user.images.length">
   <img [src]="user.images[imgIndex].url" alt="" />
   <div class="content">
     <div class="profile-content">

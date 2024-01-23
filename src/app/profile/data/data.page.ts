@@ -21,10 +21,8 @@ export class DataPage implements OnInit {
     this.userService.getUserProfile(this.userId).subscribe((response: any) => {
       this.profile = response.user;
       const date = new Date(this.profile.birthdate);
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const dt = date.getDate();
-      this.profile.birthdate = `${year}-${month}-${dt}`;
+      const birthdate = date.toISOString().substring(0, 10);
+      this.profile.birthdate = birthdate;
     });
   }
 
@@ -36,7 +34,7 @@ export class DataPage implements OnInit {
       bio: this.profile.bio,
     };
     this.userService.updateUserProfile(changes).subscribe((response: any) => {
-      console.log(response);
+      window.location.replace("/tabs/profile");
     });
   }
 

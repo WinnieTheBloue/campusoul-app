@@ -1,3 +1,7 @@
 <ion-content [fullscreen]="true">
   <app-profile-component *ngIf="userId" [userId]="userId" [users]="users" [isDiscover]="true"></app-profile-component>
+  <div class="endlist" *ngIf="noMoreUsers">
+    <h1>Vous avez parcouru tous les profils disponibles...</h1>
+    <h2>Revenez plus tard pour découvrir de nouveaux profils !</h2>
+  </div>
 </ion-content>
