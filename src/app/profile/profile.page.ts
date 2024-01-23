@@ -18,10 +18,10 @@ export class ProfilePage implements OnInit {
   profile: any = {}
   userId: any = '';
   photo: Photo[] = [];
-  constructor(private authServie: AuthService, private userService: UserService, private photoService: PhotoService) { }
+  constructor(private authService: AuthService, private userService: UserService, private photoService: PhotoService) { }
 
   ngOnInit() {
-    this.userId = this.authServie.getId();
+    this.userId = this.authService.getId();
     this.getUserProfile();
   }
 
@@ -44,7 +44,6 @@ export class ProfilePage implements OnInit {
       img.forEach((photo: string) => {
         this.loadUserImages(photo);
       });
-      console.log(this.profile.images);
     });
   }
 
@@ -67,7 +66,8 @@ export class ProfilePage implements OnInit {
   }
 
   logout() {
-    this.authServie.logout();
+    this.authService.logout();
+    window.location.href = '/auth/login';
   }
 
 }

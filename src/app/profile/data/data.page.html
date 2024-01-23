@@ -5,7 +5,7 @@
 <ion-content [fullscreen]="true">
   <ion-content [fullscreen]="true">
     <div class="form-container">
-      <form>
+      <form (submit)="updateProfile()">
         <ion-input
           type="text"
           label="Nom"
