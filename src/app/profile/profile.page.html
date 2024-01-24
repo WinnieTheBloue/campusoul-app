@@ -1,28 +1,53 @@
-<div class="header">
-  <img src="assets/logo/Logo.png" alt="">
-</div>
+<ion-header class="dark">
+  <img src="assets/logo/Logo.png" alt="" />
+</ion-header>
 
-<ion-content [fullscreen]="true" >
+<ion-content [fullscreen]="true">
   <div class="person-profile">
-    <div class="profile-photo" *ngIf="profile.images && profile.images.length > 0">
-      <img [src]="profile.images[0].url" alt="">
+    <div
+      class="profile-photo"
+      *ngIf="profile.images && profile.images.length > 0"
+    >
+      <img [src]="profile.images[0].url" alt="" />
     </div>
     <div class="profile-info">
       <h1>{{profile.name}}, {{getAge(profile.birthdate)}}</h1>
     </div>
     <div class="links">
-      <ion-button class="link-button" color="tertiary" routerLink="data" expand="block"
-      ><div class="elements-container">Informations personnelles <ion-icon name="chevron-forward-outline"></ion-icon></div></ion-button
-    >
-    <ion-button class="link-button" color="tertiary" routerLink="photos" expand="block"
-      ><div class="elements-container">Photos de profil <ion-icon name="chevron-forward-outline"></ion-icon></div></ion-button
-    >
-    <ion-button class="link-button" color="tertiary" routerLink="interests" expand="block"
-      ><div class="elements-container">Intérêts <ion-icon name="chevron-forward-outline"></ion-icon></div></ion-button
-    >
+      <ion-button
+        class="link-button"
+        color="tertiary"
+        routerLink="data"
+        expand="block"
+        ><div class="elements-container">
+          Informations personnelles
+          <ion-icon name="chevron-forward-outline"></ion-icon></div
+      ></ion-button>
+      <ion-button
+        class="link-button"
+        color="tertiary"
+        routerLink="photos"
+        expand="block"
+        ><div class="elements-container">
+          Photos de profil
+          <ion-icon name="chevron-forward-outline"></ion-icon></div
+      ></ion-button>
+      <ion-button
+        class="link-button"
+        color="tertiary"
+        routerLink="interests"
+        expand="block"
+        ><div class="elements-container">
+          Intérêts <ion-icon name="chevron-forward-outline"></ion-icon></div
+      ></ion-button>
     </div>
-    <ion-button expand="block" (click)="logout()" color="primary" type="submit" expand="block"
-        >Déconnexion</ion-button
-      >
+    <ion-button
+      expand="block"
+      (click)="logout()"
+      color="primary"
+      type="submit"
+      expand="block"
+      >Déconnexion</ion-button
+    >
   </div>
 </ion-content>
