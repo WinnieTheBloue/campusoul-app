@@ -6,11 +6,12 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-<app-profile-component
+  <app-profile-component
     *ngIf="userId && !noMoreUsers"
     [userId]="userId"
     [users]="users"
     [isDiscover]="true"
+    (noMoreUsersEvent)="handleNoMoreUsers($event)"
   >
   </app-profile-component>
   <div class="endlist" *ngIf="noMoreUsers">
@@ -70,6 +71,40 @@
             name="distanceMax"
             [ngModel]="distanceMax"
           ></ion-range>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <div class="new-match-container">
+          <h1>It's a match !</h1>
+          <h2>Toi et ... avez matché !</h2>
+          <div class="match-photos">
+            <div class="profile-photo">
+              <img [src]="" alt="" />
+            </div>
+            <div class="profile-photo">
+              <img [src]="" alt="" />
+            </div>
+          </div>
+          <ion-button
+            expand="block"
+            (click)="openMatch()"
+            color="primary"
+            type="submit"
+            expand="block"
+            >Envoyer un message</ion-button
+          >
+          <ion-button
+            expand="block"
+            (click)="cancel()"
+            color="secondary"
+            type="submit"
+            expand="block"
+            >Continuer de swiper</ion-button
+          >
         </div>
       </ion-content>
     </ng-template>

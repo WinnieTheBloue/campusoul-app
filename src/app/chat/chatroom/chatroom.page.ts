@@ -40,9 +40,6 @@ export class ChatroomPage implements OnInit {
     const newMessageMatchId = newMessage.newChatMessage.match;
     if (newMessageMatchId !== this.matchId) return;
     this.loadMessages();
-    // Vous pouvez mettre en œuvre la logique pour ajouter le nouveau message à votre liste existante
-    // Exemple:
-    this.messages.push(newMessage);
   }
 
   loadMatch() {

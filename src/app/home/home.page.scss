@@ -23,3 +23,20 @@ ion-header {
 ion-header ion-button {
     --background: #fff0;
 }
+
+.match-photos {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+.new-match-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+    height: 100%;
+}

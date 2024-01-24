@@ -5,6 +5,7 @@ import { PhotoService } from '../services/photo.service';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 import { LoadingController } from '@ionic/angular';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-home',
@@ -19,8 +20,10 @@ export class HomePage implements OnInit {
   ageMax: number = 30;
   distanceMax: number = 20;
   isLoading: boolean = true;
+  newMatchId: any = "";
+  isModalOpen: boolean = false;
 
-  constructor(private modal: ModalController, private photoService: PhotoService, private loadingCtrl: LoadingController, private userService: UserService, private authService: AuthService) { }
+  constructor(private modal: ModalController, private photoService: PhotoService, private loadingCtrl: LoadingController, private userService: UserService, private authService: AuthService, private webSocketService: WebSocketService) { }
   ngOnInit() {
     if (localStorage.getItem('ageMin')) {
       this.ageMin = Number(localStorage.getItem('ageMin'))
@@ -34,6 +37,22 @@ export class HomePage implements OnInit {
 
     this.loadUsers();
 
+    this.webSocketService.getMessages().subscribe((newMessage) => {
+      this.handleNewMessage(newMessage);
+    });
+  }
+
+  handleNewMessage(newMessage: any) {
+    // Logique de traitement du nouveau message WebSocket
+    const users = newMessage.newMatch.users;
+    if (!users.includes(this.userId)) return;
+    this.newMatchId = newMessage.newMatch._id;
+
+    this.isModalOpen = true;
+  }
+
+  handleNoMoreUsers(event: boolean) {
+    this.noMoreUsers = event;
   }
 
   loadUsers() {
@@ -56,6 +75,10 @@ export class HomePage implements OnInit {
         }
       }
     );
+  }
+
+  openMatch() {
+    
   }
 
   cancel() {

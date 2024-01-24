@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IonButton } from '@ionic/angular/standalone';
 import { IonIcon } from '@ionic/angular/standalone';
 import { IonChip } from '@ionic/angular/standalone';
@@ -24,6 +24,7 @@ export class ProfileComponentComponent implements OnInit {
   @Input() userId: any = '';
   @Input() users: any = [];
   @Input() isDiscover: boolean = false;
+  @Output() noMoreUsersEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   user: any = {};
   photos: Photo[] = [];
@@ -126,7 +127,7 @@ export class ProfileComponentComponent implements OnInit {
       this.userId = nextUser._id;
       this.loadUser();
     } else {
-      console.log('No more users to display');
+      this.noMoreUsersEvent.emit(true);
     }
   }
 
@@ -139,7 +140,7 @@ export class ProfileComponentComponent implements OnInit {
       this.userId = nextUser._id;
       this.loadUser();
     } else {
-      console.log('No more users to display');
+      this.noMoreUsersEvent.emit(true);
     }
   }
 }
