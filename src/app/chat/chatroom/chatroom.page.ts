@@ -29,6 +29,7 @@ export class ChatroomPage implements OnInit {
 
     this.loadMessages()
     this.loadMatch()
+    // this.readMessages()
 
     this.webSocketService.getMessages().subscribe((newMessage) => {
       this.handleNewMessage(newMessage);
@@ -78,6 +79,17 @@ export class ChatroomPage implements OnInit {
       },
       (error) => {
         console.error('Erreur lors du chargement des messages:', error);
+      }
+    );
+  }
+
+  async readMessages() {
+    this.messagesService.readMessages(this.matchId).subscribe(
+      (response) => {
+        this.loadMessages();
+      },
+      (error) => {
+        console.error('Erreur lors de la lecture des messages:', error);
       }
     );
   }

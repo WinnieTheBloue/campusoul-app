@@ -35,4 +35,21 @@ export class MessagesService {
     this.userService.updateUserPosition();
     return this.http.post(`${this.apiUrl}/messages/send`, body, { headers });
   }
+
+  getLastMessage(id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+    this.userService.updateUserPosition();
+    return this.http.get(`${this.apiUrl}/messages/last/${id}`, { headers });
+  }
+
+  readMessages(id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+    console.log(this.authService.getToken())
+    this.userService.updateUserPosition();
+    return this.http.post(`${this.apiUrl}/messages/read/${id}`, { headers });
+  }
 }

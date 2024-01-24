@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoginData, LoginResponse } from '../auth/login/login.module'; // Ensure these models are correctly defined
+import { LoginData, LoginResponse } from '../auth/login/login.module'; 
+import { RegisterData } from '../auth/register/register.module';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -23,6 +24,27 @@ export class AuthService {
   loginUser(data: LoginData): Observable<void> {
     return new Observable(observer => {
       this.http.post<LoginResponse>(`${this.apiUrl}/users/login`, data).subscribe(
+        response => {
+          this.setSession(response);
+          observer.next();
+          observer.complete();
+        },
+        error => {
+          observer.error(error);
+        }
+      );
+    });
+  }
+
+  /**
+   * Initiates the registration process by making a POST request to the server with the registration data.
+   * 
+   * @param data The registration data containing the user's email and password.
+   * @returns An Observable that resolves when the registration process completes.
+   */
+  registerUser(data: LoginData): Observable<void> {
+    return new Observable(observer => {
+      this.http.post<LoginResponse>(`${this.apiUrl}/users/register`, data).subscribe(
         response => {
           this.setSession(response);
           observer.next();
