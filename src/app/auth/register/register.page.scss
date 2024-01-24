@@ -4,3 +4,11 @@ h1 {
 ion-input {
     --color: #fff;
 }
+.error-message p{
+    width: 100%;
+    background-color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    color: var(--ion-red-background);
+}

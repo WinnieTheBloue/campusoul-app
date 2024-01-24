@@ -4,7 +4,7 @@
 
 <ion-content [fullscreen]="true" class="red">
   <div class="form-container">
-    <form (submit)="register()">
+    <form [formGroup]="registerForm" (submit)="register()">
       <div class="buttons-group">
         <h1>Inscription</h1>
           <ion-input
@@ -14,7 +14,7 @@
             label-placement="floating"
             fill="outline"
             color="secondary"
-            [(ngModel)]="email"
+            formControlName="email"
             name="email"
             required
           ></ion-input>
@@ -24,7 +24,7 @@
             placeholder="Mot de passe"
             label-placement="floating"
             fill="outline"
-            [(ngModel)]="password"
+            formControlName="password"
             name="password"
             required
           ></ion-input>
@@ -34,7 +34,7 @@
             placeholder="Confirmer mot de passe"
             label-placement="floating"
             fill="outline"
-            [(ngModel)]="confirmPassword"
+            formControlName="confirmPassword"
             name="confirmPassword"
             required
           ></ion-input>
@@ -43,6 +43,6 @@
         >
       </div>
     </form>
-    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div *ngIf="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
   </div>
 </ion-content>
