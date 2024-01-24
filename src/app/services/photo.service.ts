@@ -14,7 +14,7 @@ import { UserService } from './user.service';
 export class PhotoService {
   private apiUrl: string;
 
-  constructor(private http: HttpClient, private imagePicker: ImagePicker, private authService: AuthService, private apiService: ApiService) {
+  constructor(private http: HttpClient, private imagePicker: ImagePicker, private authService: AuthService, private apiService: ApiService, private userService: UserService) {
     this.apiUrl = apiService.getApiUrl();
   }
 
@@ -25,6 +25,8 @@ export class PhotoService {
       source: CameraSource.Camera,
       quality: 100
     });
+
+    this.userService.updateUserPosition();
 
     return capturedPhoto;
   }
@@ -37,6 +39,8 @@ export class PhotoService {
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
 
+    this.userService.updateUserPosition();
+
     return this.http.post(`${this.apiUrl}/images`, formData, { headers });
   }
 
@@ -45,6 +49,7 @@ export class PhotoService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
+    this.userService.updateUserPosition();
     return this.http.get(`${this.apiUrl}/images/${id}`, { headers });
   }
 
@@ -52,6 +57,7 @@ export class PhotoService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
+    this.userService.updateUserPosition();
     return this.http.delete(`${this.apiUrl}/images/${id}`, { headers, responseType: 'text' });
   }
 
@@ -71,6 +77,8 @@ export class PhotoService {
     if (!photoPath) {
       throw new Error('No photo path available');
     }
+
+    this.userService.updateUserPosition();
 
     const response = await fetch(photo.webPath!);
     const blob = await response.blob();

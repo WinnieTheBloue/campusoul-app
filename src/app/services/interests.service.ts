@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { AuthService } from './auth.service';
 export class InterestsService {
 private apiUrl: string; 
 
-  constructor(private http: HttpClient, private apiService: ApiService, private authService: AuthService) { 
+  constructor(private http: HttpClient, private apiService: ApiService, private authService: AuthService, private userService: UserService) { 
     this.apiUrl = apiService.getApiUrl();
   }
 
@@ -19,6 +20,7 @@ private apiUrl: string;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
+    this.userService.updateUserPosition();
     return this.http.get(`${this.apiUrl}/interests`, { headers });
   }
 
@@ -26,6 +28,7 @@ private apiUrl: string;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
+    this.userService.updateUserPosition();
     return this.http.get(`${this.apiUrl}/interests/${id}`, { headers });
   }
 
@@ -34,6 +37,7 @@ private apiUrl: string;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
+    this.userService.updateUserPosition();
     return this.http.delete(`${this.apiUrl}/users/${userId}/interests/${id}`, { headers });
   }
 
@@ -41,6 +45,7 @@ private apiUrl: string;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
+    this.userService.updateUserPosition();
     return this.http.delete(`${this.apiUrl}/users/interests`, { headers });
   }
 }

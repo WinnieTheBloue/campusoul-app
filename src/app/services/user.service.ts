@@ -9,9 +9,9 @@ import { Geolocation } from '@capacitor/geolocation';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl: string; 
+  private apiUrl: string;
 
-  constructor(private http: HttpClient, private authService: AuthService, private apiService: ApiService) { 
+  constructor(private http: HttpClient, private authService: AuthService, private apiService: ApiService) {
     this.apiUrl = apiService.getApiUrl();
   }
 
@@ -40,32 +40,29 @@ export class UserService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    return this.http.get(`${this.apiUrl}/users?page=${page ? page : 1 }${minAge ? "&minAge=" + minAge : ""}${maxAge ? "&maxAge=" + maxAge : ""}${maxDistance ? "&maxDistance=" + maxDistance : ""}`, { headers });
+    return this.http.get(`${this.apiUrl}/users?page=${page ? page : 1}${minAge ? "&minAge=" + minAge : ""}${maxAge ? "&maxAge=" + maxAge : ""}${maxDistance ? "&maxDistance=" + maxDistance : ""}`, { headers });
   }
-  
+
   async updateUserPosition() {
     try {
       console.log('Updt pos')
       const position = await Geolocation.getCurrentPosition();
-      const coordinates = [position.coords.longitude, position.coords.latitude]; // Assurez-vous de l'ordre [longitude, latitude]
+      const coordinates = [position.coords.longitude, position.coords.latitude]; 
       const id = this.authService.getId();
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${this.authService.getToken()}`,
-        'Content-Type': 'application/json' // Assurez-vous d'avoir le bon type de contenu
+        'Content-Type': 'application/json' 
       });
-  
-      // Créer le corps de la requête
+
       const body = {
-        type: 'Point', // Selon le modèle de données que vous avez dans votre backend
+        type: 'Point',
         coordinates: coordinates
       };
-  
-      // Effectuer la requête POST
       return this.http.post(`${this.apiUrl}/users/location/${id}`, body, { headers }).toPromise();
     } catch (error) {
       console.error('Error updating user position', error);
       return error;
     }
   }
-  
+
 }

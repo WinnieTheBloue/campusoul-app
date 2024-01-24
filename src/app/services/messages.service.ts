@@ -4,14 +4,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ApiService } from './api.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessagesService {
-  private apiUrl: string; 
+  private apiUrl: string;
 
-  constructor(private http: HttpClient, private authService: AuthService, private apiService: ApiService) { 
+  constructor(private http: HttpClient, private authService: AuthService, private apiService: ApiService, private userService: UserService) {
     this.apiUrl = apiService.getApiUrl();
   }
 
@@ -21,13 +22,17 @@ export class MessagesService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
+
+    this.userService.updateUserPosition();
+
     return this.http.get(`${this.apiUrl}/messages/${id}`, { headers });
-  }  
+  }
 
   sendMessage(body: object): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    return this.http.post(`${this.apiUrl}/messages/send`, body , { headers });
+    this.userService.updateUserPosition();
+    return this.http.post(`${this.apiUrl}/messages/send`, body, { headers });
   }
 }
