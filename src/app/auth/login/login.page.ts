@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -11,48 +11,41 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  email?: string = "";
-  password?: string = "";
-  isLoading: boolean = false;
+  loginForm: FormGroup;
 
-  apiUrl: string;
-
-  constructor(private http: HttpClient, private apiService: ApiService, private authService: AuthService, private router: Router) { 
-    this.apiUrl = apiService.getApiUrl();
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private loadingService: LoadingService
+  ) {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   login(): void {
-    // Créez un objet contenant les données à envoyer
-    this.isLoading = true;
-    const loginData = {
-      email: this.email,
-      password: this.password
-    };
+    if (this.loginForm.invalid) {
+      // Optionally handle form errors here
+      return;
+    }
 
-    // Utilisez la méthode postData pour envoyer les données à l'API
-    this.postData(loginData).subscribe(
-      (response) => {
-        // Traitez la réponse de l'API ici
-        console.log('Réponse de l\'API:', response);
-        this.authService.setId(response.user._id);
-        this.authService.setToken(response.token); 
-        this.isLoading = false;
-        this.router.navigate(['/tabs/home']);
-      },
-      (error) => {
-        // Gérez les erreurs ici
-        this.isLoading = false;
-        console.error('Erreur lors de la connexion:', error);
-      }
-    );
-  }
+    this.loadingService.showLoading();
+    const loginData = this.loginForm.value;
 
-  postData(data: any): Observable<any> {
-    // Utilisez la méthode post du service HttpClient pour envoyer les données JSON
-    return this.http.post(`${this.apiUrl}/users/login`, data);
+    this.authService.loginUser(loginData)
+      .pipe(finalize(() => this.loadingService.hideLoading()))
+      .subscribe(
+        () => {
+          this.router.navigate(['/tabs/home']);
+        },
+        (error) => {
+          console.error('Error during login:', error);
+          // Display error message to user
+        }
+      );
   }
 }
-

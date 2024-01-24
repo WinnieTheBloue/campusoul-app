@@ -3,9 +3,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="red">
-  <app-loader-component *ngIf="isLoading"></app-loader-component>
   <div class="form-container">
-    <form (submit)="login()">
+    <form [formGroup]="loginForm" (submit)="login()">
       <div class="buttons-group">
         <h1>Connexion</h1>
         <ion-input
@@ -15,7 +14,7 @@
           label-placement="floating"
           fill="outline"
           color="primary"
-          [(ngModel)]="email"
+          formControlName="email"
           name="email"
           required
         ></ion-input>
@@ -25,7 +24,7 @@
           placeholder="Mot de passe"
           label-placement="floating"
           fill="outline"
-          [(ngModel)]="password"
+          formControlName="password"
           name="password"
           required
         ></ion-input>

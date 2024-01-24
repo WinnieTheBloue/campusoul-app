@@ -43,8 +43,8 @@ export class RegisterPage implements OnInit {
     this.postData(registerData).subscribe(
       (response) => {
         console.log('Réponse de l\'API:', response);
-        this.authService.setId(response.user._id);
-        this.authService.setToken(response.token); 
+        // this.authService.setId(response.user._id);
+        // this.authService.setToken(response.token); 
         this.router.navigate(['/auth/register/profile']);
       },
       (error) => {

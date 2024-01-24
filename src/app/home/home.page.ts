@@ -4,6 +4,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { PhotoService } from '../services/photo.service';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -17,9 +18,9 @@ export class HomePage implements OnInit {
   ageMin: number = 18;
   ageMax: number = 30;
   distanceMax: number = 20;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
 
-  constructor(private modal: ModalController, private photoService: PhotoService, private userService: UserService, private authService: AuthService) { }
+  constructor(private modal: ModalController, private photoService: PhotoService, private loadingCtrl: LoadingController, private userService: UserService, private authService: AuthService) { }
   ngOnInit() {
     if (localStorage.getItem('ageMin')) {
       this.ageMin = Number(localStorage.getItem('ageMin'))
@@ -36,7 +37,6 @@ export class HomePage implements OnInit {
   }
 
   loadUsers() {
-    this.isLoading = true;
     this.users = [];
     this.userId = '';
     this.noMoreUsers = false
@@ -45,13 +45,11 @@ export class HomePage implements OnInit {
         this.users = response.users;
         this.userId = this.users[0]._id;
         if (this.users.length == 0) {
-          this.isLoading = false;
           this.noMoreUsers = true
         }
       },
       (error) => {
         console.error('Erreur lors du chargement des données utilisateur:', error);
-        this.isLoading = false;
         if (error.status == 404) {
 
           this.noMoreUsers = true
@@ -59,7 +57,6 @@ export class HomePage implements OnInit {
       }
     );
   }
-
 
   cancel() {
     this.modal.dismiss(null, 'cancel');

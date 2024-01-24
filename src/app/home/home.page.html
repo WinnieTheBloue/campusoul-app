@@ -8,8 +8,7 @@
 
 
 <ion-content [fullscreen]="true">
-  <app-loader-component *ngIf="isLoading"></app-loader-component>
-  <app-profile-component
+<app-profile-component
     *ngIf="userId && !noMoreUsers"
     [userId]="userId"
     [users]="users"

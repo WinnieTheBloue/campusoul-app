@@ -34,11 +34,13 @@
     justify-content: space-between;
     padding: 1rem 1rem;
 }
-ion-header img{
+
+ion-header img {
     height: 60px;
     object-fit: cover;
 
 }
+
 .red {
     --background: var(--ion-red-background);
 }
@@ -52,6 +54,7 @@ ion-header img{
     gap: 6rem;
     padding: 0 2rem;
 }
+
 .buttons-group {
     width: 100%;
     height: 100%;
@@ -61,16 +64,20 @@ ion-header img{
     gap: 1rem;
     padding: 0 2rem;
 }
-.buttons-group p{
+
+.buttons-group p {
     text-align: center;
     color: #fff;
 }
+
 ion-input {
     margin-bottom: 2rem;
 }
+
 ion-header.dark {
     background: #631612;
 }
+
 .person-profile {
     width: 100%;
     height: 100%;
@@ -89,8 +96,14 @@ ion-header.dark {
     overflow: hidden;
     border: solid 2px var(--ion-color-primary);
 }
+
 .profile-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.custom-loading {
+    --background: #e3edff;
+    --spinner-color: var(--ion-red-background);
 }
