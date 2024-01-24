@@ -17,6 +17,7 @@ export class HomePage implements OnInit {
   ageMin: number = 18;
   ageMax: number = 30;
   distanceMax: number = 20;
+  isLoading: boolean = false;
 
   constructor(private modal: ModalController, private photoService: PhotoService, private userService: UserService, private authService: AuthService) { }
   ngOnInit() {
@@ -35,6 +36,7 @@ export class HomePage implements OnInit {
   }
 
   loadUsers() {
+    this.isLoading = true;
     this.users = [];
     this.userId = '';
     this.noMoreUsers = false
@@ -43,12 +45,15 @@ export class HomePage implements OnInit {
         this.users = response.users;
         this.userId = this.users[0]._id;
         if (this.users.length == 0) {
+          this.isLoading = false;
           this.noMoreUsers = true
         }
       },
       (error) => {
         console.error('Erreur lors du chargement des données utilisateur:', error);
-        if(error.status == 404) {
+        this.isLoading = false;
+        if (error.status == 404) {
+
           this.noMoreUsers = true
         }
       }

@@ -3,6 +3,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="red">
+  <app-loader-component *ngIf="isLoading"></app-loader-component>
   <div class="form-container">
     <form (submit)="login()">
       <div class="buttons-group">

@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { ProfileComponentComponent } from '../components/profile-component/profile-component.component';
+import {LoaderComponent} from '../components/loader-component/loader.component'
 
 import { HomePage } from './home.page';
 
@@ -15,7 +16,8 @@ import { HomePage } from './home.page';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    ProfileComponentComponent
+    ProfileComponentComponent,
+    LoaderComponent
   ],
   declarations: [HomePage]
 })

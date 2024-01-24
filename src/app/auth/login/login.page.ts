@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
   email?: string = "";
   password?: string = "";
+  isLoading: boolean = false;
 
   apiUrl: string;
 
@@ -25,6 +26,7 @@ export class LoginPage implements OnInit {
 
   login(): void {
     // Créez un objet contenant les données à envoyer
+    this.isLoading = true;
     const loginData = {
       email: this.email,
       password: this.password
@@ -37,10 +39,12 @@ export class LoginPage implements OnInit {
         console.log('Réponse de l\'API:', response);
         this.authService.setId(response.user._id);
         this.authService.setToken(response.token); 
+        this.isLoading = false;
         this.router.navigate(['/tabs/home']);
       },
       (error) => {
         // Gérez les erreurs ici
+        this.isLoading = false;
         console.error('Erreur lors de la connexion:', error);
       }
     );

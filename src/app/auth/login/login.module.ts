@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { LoginPageRoutingModule } from './login-routing.module';
+import { LoaderComponent } from '../../components/loader-component/loader.component';
 
 import { LoginPage } from './login.page';
 
@@ -13,7 +14,8 @@ import { LoginPage } from './login.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    LoginPageRoutingModule
+    LoginPageRoutingModule,
+    LoaderComponent
   ],
   declarations: [LoginPage],
 })

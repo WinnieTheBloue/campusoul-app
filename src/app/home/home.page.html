@@ -5,7 +5,10 @@
   </ion-button>
 </ion-header>
 
+
+
 <ion-content [fullscreen]="true">
+  <app-loader-component *ngIf="isLoading"></app-loader-component>
   <app-profile-component
     *ngIf="userId && !noMoreUsers"
     [userId]="userId"
@@ -25,7 +28,7 @@
           <ion-buttons slot="start">
             <ion-button (click)="cancel()">Annuler</ion-button>
           </ion-buttons>
-          <ion-title>Welcome</ion-title>
+          <ion-title>Filtrer</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="confirm()" [strong]="true"
               >Confirmer</ion-button
