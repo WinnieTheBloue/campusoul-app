@@ -13,7 +13,6 @@ export class LoadingService {
 
     async showLoading() {
         this.activeRequests++;
-        console.log("showLoading " + this.activeRequests);
 
         if (!this.loadingElement && !this.isLoadingShown) {
             this.isLoadingShown = true;
