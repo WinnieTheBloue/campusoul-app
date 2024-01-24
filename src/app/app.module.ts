@@ -22,6 +22,4 @@ import { AppComponent } from './app.component';
     ApiService, ImagePicker],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-  
-}
+export class AppModule {}
