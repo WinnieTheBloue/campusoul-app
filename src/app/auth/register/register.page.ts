@@ -73,7 +73,6 @@ export class RegisterPage implements OnInit {
 
     this.errorMessage = "";
 
-    // Check if passwords match
     if(this.registerForm.value.password !== this.registerForm.value.confirmPassword){
       this.errorMessage = "Les mots de passe ne correspondent pas.";
       return;
@@ -81,7 +80,6 @@ export class RegisterPage implements OnInit {
 
     this.errorMessage = "";
 
-    // Register the user take away the confirmPassword field
     delete this.registerForm.value.confirmPassword;
     const registerData = this.registerForm.value;
 
