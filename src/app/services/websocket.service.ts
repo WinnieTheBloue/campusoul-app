@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Observable, Subject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ export class WebSocketService {
   private socket: WebSocket;
   private messagesSubject: Subject<any> = new Subject();
 
-  constructor(private toastController: ToastController) {
+  constructor(private toastController: ToastController, private authService: AuthService) {
     this.socket = new WebSocket('wss://campusoul-hrim.onrender.com');
 
     this.socket.addEventListener('open', (event) => {
@@ -18,8 +19,12 @@ export class WebSocketService {
 
     this.socket.addEventListener('message', (event) => {
       const message = JSON.parse(event.data);
+      // console.log(message.newChatMessage.sender)
+      if(message.newChatMessage.sender != this.authService.getId()) {
+        this.presentToast(message.newChatMessage.content);
+      }
       // console.log('Message reçu : ', message.newChatMessage.content);
-      this.presentToast(message.newChatMessage.content);
+      
       this.messagesSubject.next(message);
     });
 
