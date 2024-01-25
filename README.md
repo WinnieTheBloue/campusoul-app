@@ -30,8 +30,8 @@ The Campusoul app is built using the Ionic framework with Angular, offering a cr
 
 ## 📝 Setup and Configuration
 1. **Clone the repository**
-`git clone https://github.com/WinnieTheBloue/campusoul-app.git
-cd campusoul-app`
+`git clone https://github.com/WinnieTheBloue/campusoul-app.git`
+`cd campusoul-app`
 
 2. **Install dependencies**
 `npm install`
