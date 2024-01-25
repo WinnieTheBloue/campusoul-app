@@ -17,7 +17,8 @@ export class ApiInterceptor implements HttpInterceptor {
    * @param {LoadingService} loadingService - Service for showing and hiding loading indicators.
    * @param {AuthService} authService - Service for authentication-related functionalities.
    */
-  constructor(private loadingService: LoadingService, private authService: AuthService) {}
+  constructor(private loadingService: LoadingService, 
+    private authService: AuthService) {}
 
   /**
    * Intercepts HTTP requests and adds functionality to show and hide loading indicators,
