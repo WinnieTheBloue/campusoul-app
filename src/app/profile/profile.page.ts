@@ -3,28 +3,63 @@ import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 import { PhotoService } from '../services/photo.service';
 
+/**
+ * Interface for representing a photo with ID and URL.
+ */
 interface Photo {
   id: string;
   url: string;
 }
 
+/**
+ * Component for the profile page.
+ * It includes functionality for displaying user profiles, calculating age from birthdate,
+ * loading user images, and logging out.
+ */
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-
 export class ProfilePage implements OnInit {
-  profile: any = {}
-  userId: any = '';
-  photo: Photo[] = [];
-  constructor(private authService: AuthService, private userService: UserService, private photoService: PhotoService) { }
+  /**
+   * The user's profile data.
+   */
+  profile: any = {};
 
+  /**
+   * The ID of the user.
+   */
+  userId: any = '';
+
+  /**
+   * Array of photos associated with the user.
+   */
+  photo: Photo[] = [];
+
+  /**
+   * Constructor initializes the component with necessary service dependencies.
+   * @param {AuthService} authService - Service for authentication-related functionalities.
+   * @param {UserService} userService - Service for user-related functionalities.
+   * @param {PhotoService} photoService - Service for photo-related functionalities.
+   */
+  constructor(private authService: AuthService, 
+    private userService: UserService, 
+    private photoService: PhotoService) { }
+
+  /**
+   * OnInit lifecycle hook to fetch user profile and related data after component initialization.
+   */
   ngOnInit() {
     this.userId = this.authService.getId();
     this.getUserProfile();
   }
 
+  /**
+   * Calculates the age based on the birthdate.
+   * @param {string} birthdateStr - The birthdate string.
+   * @returns {number} The calculated age.
+   */
   getAge(birthdateStr: string): number {
     const birthdate = new Date(birthdateStr);
     const today = new Date();
@@ -36,6 +71,9 @@ export class ProfilePage implements OnInit {
     return age;
   }
 
+  /**
+   * Fetches and sets the user's profile data.
+   */
   getUserProfile() {
     this.userService.getUserProfile(this.userId).subscribe((response: any) => {
       this.profile = response.user;
@@ -47,6 +85,10 @@ export class ProfilePage implements OnInit {
     });
   }
 
+  /**
+   * Loads user images by ID and sets them in the profile.
+   * @param {string} id - The ID of the image to load.
+   */
   loadUserImages(id: string) {
     this.photoService.getPhoto(id).subscribe(
       (response) => {
@@ -58,13 +100,16 @@ export class ProfilePage implements OnInit {
       },
       (error) => {
         console.error(
-          'Erreur lors du chargement des données utilisateur:',
+          'Error loading user images:',
           error
         );
       }
     );
   }
 
+  /**
+   * Logs out the user and redirects to the login page.
+   */
   logout() {
     this.authService.logout();
     window.location.href = '/auth/login';

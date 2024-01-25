@@ -1,34 +1,60 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { PhotoService } from '../../services/photo.service';
 import { UserService } from '../../services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
 
+/**
+ * Interface for representing a photo with ID and URL for upload.
+ */
 interface PhotoUpld {
   id: string;
   url: string;
 }
 
-interface Photos {
-  id: string;
-  url: string;
-}
+/**
+ * Component for the photos page.
+ * It includes functionality for displaying, uploading, and deleting photos,
+ * as well as selecting photos from the camera or gallery.
+ */
 @Component({
   selector: 'app-photos',
   templateUrl: './photos.page.html',
   styleUrls: ['./photos.page.scss'],
 })
 export class PhotosPage implements OnInit {
+  /**
+   * Array of photo IDs associated with the user.
+   */
   photosIds: any[] = [];
-  photos: PhotoUpld[] = [];
-  constructor(private actionSheet: ActionSheetController, public photoService: PhotoService, private userService: UserService, private router: Router, private authService: AuthService) { }
 
+  /**
+   * Array of photos associated with the user.
+   */
+  photos: PhotoUpld[] = [];
+
+  /**
+   * Constructor initializes the component with necessary service dependencies.
+   * @param {ActionSheetController} actionSheet - Ionic controller for handling action sheets.
+   * @param {PhotoService} photoService - Service for photo-related functionalities.
+   * @param {UserService} userService - Service for user-related functionalities.
+   * @param {AuthService} authService - Service for authentication-related functionalities.
+   */
+  constructor(private actionSheet: ActionSheetController,
+    public photoService: PhotoService,
+    private userService: UserService,
+    private authService: AuthService) { }
+
+  /**
+   * OnInit lifecycle hook to load user photos after component initialization.
+   */
   ngOnInit() {
     this.loadUserPhotos();
   }
 
-
+  /**
+   * Fetches and sets the user's photos data.
+   */
   loadUserPhotos(): void {
     this.photosIds = []
     this.photos = []
@@ -45,6 +71,10 @@ export class PhotosPage implements OnInit {
     );
   }
 
+  /**
+   * Loads photo data by photo ID and adds it to the photos array.
+   * @param {string} id - The ID of the photo to load.
+   */
   loadPhotoData(id: string): void {
     this.photoService.getPhoto(id).subscribe(
       (response) => {
@@ -60,6 +90,10 @@ export class PhotosPage implements OnInit {
     );
   }
 
+  /**
+   * Handles new photo upload from input file change event.
+   * @param {any} event - The input file change event.
+   */
   newPhoto(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -74,6 +108,10 @@ export class PhotosPage implements OnInit {
     }
   }
 
+  /**
+   * Deletes a photo by ID.
+   * @param {string} id - The ID of the photo to delete.
+   */
   deletePhoto(id: string): void {
     this.photoService.deletePhoto(id).subscribe(
       (response) => {
@@ -85,6 +123,9 @@ export class PhotosPage implements OnInit {
     );
   }
 
+  /**
+   * Presents options for selecting an image from the camera or gallery.
+   */
   async selectimageOptions() {
     const actionSheet = await this.actionSheet.create({
       header: 'Selectionner un image',
@@ -124,6 +165,10 @@ export class PhotosPage implements OnInit {
     await actionSheet.present();
   }
 
+  /**
+   * Uploads a photo taken from the camera or selected from the gallery.
+   * @param {any} photo - The photo object to upload.
+   */
   private uploadPhotoFromCamera(photo: any) {
     this.photoService.uploadPhotoFromCamera(photo).then(observable => {
       observable.subscribe(
