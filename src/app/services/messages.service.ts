@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ApiService } from './api.service';
-import { UserService } from './user.service';
 
 /**
  * Injectable service to manage message-related operations.
@@ -24,7 +23,6 @@ export class MessagesService {
    * @param {HttpClient} http - The Angular HTTP client for making HTTP requests.
    * @param {AuthService} authService - Service for authentication-related functionalities.
    * @param {ApiService} apiService - Service for API-related functionalities.
-   * @param {UserService} userService - Service for user-related functionalities.
    */
   constructor(private http: HttpClient, 
     private authService: AuthService, 
