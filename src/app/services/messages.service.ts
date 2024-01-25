@@ -47,4 +47,11 @@ export class MessagesService {
     });
     return this.http.post(`${this.apiUrl}/messages/read/${id}`, { headers });
   }
+
+  getTotalUnreadMessages(id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+    return this.http.get(`${this.apiUrl}/messages/unread/${id}`, { headers });
+  }
 }

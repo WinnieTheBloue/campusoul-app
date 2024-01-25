@@ -61,19 +61,22 @@ export class ChatPage implements OnInit {
       async (response) => {
         for (const match of response) {
           const lastMsg = await this.getLastMessage(match._id);
+          const totalUnreadMessages = await this.getTotalUnreadMessages(match._id);
           let lastMsgSender = '0';
           let lastMsgContent = '';
           let lastMsgDate = '';
+          let unreadMessages = '';
           if (lastMsg.length > 0) {
             lastMsgSender = lastMsg[0].sender;
             lastMsgContent = lastMsg[0].content;
             lastMsgDate = lastMsg[0].createdAt;
           }
+          if (totalUnreadMessages > 0) {
+            unreadMessages = totalUnreadMessages;
+          }
           let mt = {}
           if (match.users[0]._id != this.userId) {
             const img = await this.loadUserPhoto(match.users[0].images[0]);
-
-
             mt = {
               matchId: match._id,
               name: match.users[0].name,
@@ -81,7 +84,8 @@ export class ChatPage implements OnInit {
               img: img,
               lastMsg: lastMsgContent,
               lastMsgSender: lastMsgSender,
-              lastMsgDate: lastMsgDate
+              lastMsgDate: lastMsgDate,
+              unreadMessages: unreadMessages
             }
           }
           if (match.users[1]._id != this.userId) {
@@ -93,7 +97,8 @@ export class ChatPage implements OnInit {
               img: img,
               lastMsg: lastMsgContent,
               lastMsgSender: lastMsgSender,
-              lastMsgDate: lastMsgDate
+              lastMsgDate: lastMsgDate,
+              unreadMessages: unreadMessages
             }
           }
 
@@ -123,6 +128,21 @@ export class ChatPage implements OnInit {
   getLastMessage(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.messageService.getLastMessage(id).subscribe(
+        (response) => {
+          console.log(response)
+          resolve(response);
+        },
+        (error) => {
+          console.error('Erreur lors du chargement des données utilisateur:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  getTotalUnreadMessages(id: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.messageService.getTotalUnreadMessages(id).subscribe(
         (response) => {
           console.log(response)
           resolve(response);
