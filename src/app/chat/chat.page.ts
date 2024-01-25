@@ -5,6 +5,7 @@ import { PhotoService } from '../services/photo.service';
 import { MessagesService } from '../services/messages.service';
 import { last } from 'rxjs';
 import { ActionSheetController } from '@ionic/angular';
+import { WebSocketService } from '../services/websocket.service';
 
 @Component({
   selector: 'app-chat',
@@ -15,10 +16,18 @@ export class ChatPage implements OnInit {
   matches: any[] = []
   userId: any = '';
 
-  constructor(private matchService: MatchService, private authService: AuthService, private photoService: PhotoService, private messageService: MessagesService, private actionSheetCtrl: ActionSheetController) { }
+  constructor(private matchService: MatchService, private webSocketService: WebSocketService, private authService: AuthService, private photoService: PhotoService, private messageService: MessagesService, private actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
     this.userId = this.authService.getId();
+    this.loadMatches();
+    this.webSocketService.getMessages().subscribe((newMessage) => {
+      this.newEvent();
+    });
+  }
+
+  newEvent() {
+    this.matches = [];
     this.loadMatches();
   }
 
