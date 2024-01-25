@@ -35,4 +35,11 @@ export class MatchService {
     });
     return this.http.get(`${this.apiUrl}/matchs/${id}`,  { headers });
   }
+
+  unMatch(id: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+    return this.http.post(`${this.apiUrl}/matchs/unmatch/${id}`,  { headers });
+  }
 }

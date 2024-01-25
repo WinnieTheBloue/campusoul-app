@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { PhotoService } from '../services/photo.service';
 import { MessagesService } from '../services/messages.service';
 import { last } from 'rxjs';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-chat',
@@ -13,11 +14,37 @@ import { last } from 'rxjs';
 export class ChatPage implements OnInit {
   matches: any[] = []
   userId: any = '';
-  constructor(private matchService: MatchService, private authService: AuthService, private photoService: PhotoService, private messageService: MessagesService) { }
+
+  constructor(private matchService: MatchService, private authService: AuthService, private photoService: PhotoService, private messageService: MessagesService, private actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
     this.userId = this.authService.getId();
     this.loadMatches();
+  }
+
+  async presentActionSheet(matchId: string) {
+
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Options du match',
+      buttons: [
+        {
+          text: 'Supprimer le match',
+          role: 'destructive',
+          handler: () => {
+            this.deleteMatch(matchId);
+          },
+        },
+        {
+          text: 'Annuler',
+          role: 'cancel',
+          data: {
+            action: 'cancel',
+          },
+        },
+      ],
+    });
+
+    await actionSheet.present();
   }
 
   async loadMatches() {
@@ -66,16 +93,16 @@ export class ChatPage implements OnInit {
         this.matches.sort((a, b) => {
           const dateA = new Date(a.lastMsgDate);
           const dateB = new Date(b.lastMsgDate);
-          
+
           if (dateA < dateB) {
-            return 1; 
+            return 1;
           } else if (dateA > dateB) {
-            return -1; 
+            return -1;
           } else {
-            return 0; 
+            return 0;
           }
         });
-         
+
 
       },
       (error) => {
@@ -104,6 +131,22 @@ export class ChatPage implements OnInit {
       this.photoService.getPhoto(id).subscribe(
         (response) => {
           resolve(response.url);
+        },
+        (error) => {
+          console.error('Erreur lors du chargement des données utilisateur:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  deleteMatch(matchId: string) {
+    return new Promise((resolve, reject) => {
+      this.matchService.unMatch(matchId).subscribe(
+        (response) => {
+          this.matches = [];
+          this.loadMatches();
+          resolve(response);
         },
         (error) => {
           console.error('Erreur lors du chargement des données utilisateur:', error);
