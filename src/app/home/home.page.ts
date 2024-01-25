@@ -86,7 +86,6 @@ export class HomePage implements OnInit {
   }
 
   handleNewMessage(newMessage: any) {
-    console.log(newMessage)
 
     if (newMessage.newMatch) {
       let senderId = '';
@@ -97,12 +96,9 @@ export class HomePage implements OnInit {
         }
 
       })
-      console.log('User id' + senderId)
-      console.log('Match id' + newMessage.newMatch._id)
 
       this.userService.getUserProfile(senderId).subscribe((user) => {
         this.matchName = user.user.name;
-        // this.newMatchId = newMessage.newMatch._id;
         this.matchLink = `/chat/chatroom/${newMessage.newMatch._id}`;
 
         this.matchPhoto = user.user.images[0];
