@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { LoadingService } from '../../services/loading.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,8 @@ export class LoginPage implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private userService: UserService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -40,11 +42,11 @@ export class LoginPage implements OnInit {
       .pipe(finalize(() => this.loadingService.hideLoading()))
       .subscribe(
         () => {
+          this.userService.updateUserPosition();
           this.router.navigate(['/tabs/home']);
         },
         (error) => {
           console.error('Error during login:', error);
-          // Display error message to user
         }
       );
   }

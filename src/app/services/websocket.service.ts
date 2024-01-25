@@ -21,13 +21,28 @@ export class WebSocketService {
 
     this.socket.addEventListener('message', (event) => {
       const message = JSON.parse(event.data);
-      if (message.newChatMessage.sender != this.authService.getId()) {
-        this.userService.getUserProfile(message.newChatMessage.sender).subscribe((user) => {
-          const sender = user.user.name;
-          this.presentToast(message.newChatMessage.content, message.newChatMessage.match, sender);
-        });
+
+      if (message.newChatMessage) {
+        if (message.newChatMessage.sender != this.authService.getId()) {
+          this.userService.getUserProfile(message.newChatMessage.sender).subscribe((user) => {
+            const sender = user.user.name;
+            this.presentToast(message.newChatMessage.content, message.newChatMessage.match, sender);
+          });
+
+        }
+      }
+      if (message.newMatch) {
+        message.newMatch.users.forEach((user: any) => {
+          if (user != this.authService.getId()) {
+            this.userService.getUserProfile(user).subscribe((user) => {
+              const sender = user.user.name;
+              this.presentToast('Nouveau match !', message.newMatch._id, sender);
+            });
+          }
+        })
 
       }
+
 
       this.messagesSubject.next(message);
     });
@@ -41,7 +56,7 @@ export class WebSocketService {
   async presentToast(message: string, matchId: string, sender: string) {
     const toast = await this.toastController.create({
       message: `${sender} : ${message}`,
-      duration: 1500,
+      duration: 3000,
       position: 'top',
       color: 'primary',
       buttons: [{

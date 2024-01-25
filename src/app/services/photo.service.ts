@@ -26,7 +26,6 @@ export class PhotoService {
       quality: 100
     });
 
-    this.userService.updateUserPosition();
 
     return capturedPhoto;
   }
@@ -39,7 +38,6 @@ export class PhotoService {
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
 
-    this.userService.updateUserPosition();
 
     return this.http.post(`${this.apiUrl}/images`, formData, { headers });
   }
@@ -49,7 +47,6 @@ export class PhotoService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.get(`${this.apiUrl}/images/${id}`, { headers });
   }
 
@@ -57,7 +54,6 @@ export class PhotoService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.delete(`${this.apiUrl}/images/${id}`, { headers, responseType: 'text' });
   }
 
@@ -78,7 +74,6 @@ export class PhotoService {
       throw new Error('No photo path available');
     }
 
-    this.userService.updateUserPosition();
 
     const response = await fetch(photo.webPath!);
     const blob = await response.blob();

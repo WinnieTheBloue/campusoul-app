@@ -19,7 +19,6 @@ export class MatchService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.get(`${this.apiUrl}/matchs/list`, { headers });
   }
 
@@ -27,7 +26,6 @@ export class MatchService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.post(`${this.apiUrl}/matchs/like`, id, { headers });
   }
 
@@ -35,7 +33,6 @@ export class MatchService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.get(`${this.apiUrl}/matchs/${id}`,  { headers });
   }
 }

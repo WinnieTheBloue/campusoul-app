@@ -20,7 +20,6 @@ private apiUrl: string;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.get(`${this.apiUrl}/interests`, { headers });
   }
 
@@ -28,7 +27,6 @@ private apiUrl: string;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.get(`${this.apiUrl}/interests/${id}`, { headers });
   }
 
@@ -37,7 +35,6 @@ private apiUrl: string;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.delete(`${this.apiUrl}/users/${userId}/interests/${id}`, { headers });
   }
 
@@ -45,7 +42,6 @@ private apiUrl: string;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    this.userService.updateUserPosition();
     return this.http.delete(`${this.apiUrl}/users/interests`, { headers });
   }
 }

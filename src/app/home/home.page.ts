@@ -6,6 +6,12 @@ import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 import { LoadingController } from '@ionic/angular';
 import { WebSocketService } from 'src/app/services/websocket.service';
+import { Router } from '@angular/router';
+
+interface Photo {
+  id: string;
+  url: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -20,10 +26,15 @@ export class HomePage implements OnInit {
   ageMax: number = 30;
   distanceMax: number = 20;
   isLoading: boolean = true;
-  newMatchId: any = "";
+  matchLink: string = "";
   isModalOpen: boolean = false;
+  profile: any = {}
 
-  constructor(private modal: ModalController, private photoService: PhotoService, private loadingCtrl: LoadingController, private userService: UserService, private authService: AuthService, private webSocketService: WebSocketService) { }
+
+  matchName: string = "";
+  matchPhoto: string = "";
+
+  constructor(private modal: ModalController, private photoService: PhotoService, private loadingCtrl: LoadingController, private userService: UserService, private authService: AuthService, private webSocketService: WebSocketService, private router: Router) { }
   ngOnInit() {
     if (localStorage.getItem('ageMin')) {
       this.ageMin = Number(localStorage.getItem('ageMin'))
@@ -36,81 +47,148 @@ export class HomePage implements OnInit {
     }
 
     this.loadUsers();
+    this.getUserProfile();
 
     this.webSocketService.getMessages().subscribe((newMessage) => {
       this.handleNewMessage(newMessage);
     });
   }
 
-  handleNewMessage(newMessage: any) {
-    // Logique de traitement du nouveau message WebSocket
-    const users = newMessage.newMatch.users;
-    if (!users.includes(this.userId)) return;
-    this.newMatchId = newMessage.newMatch._id;
+  getUserProfile() {
+    this.userService.getUserProfile(this.authService.getId()).subscribe((response: any) => {
+      this.profile = response.user;
+      const img = this.profile.images;
+      this.profile.images = [];
+      img.forEach((photo: string) => {
+        this.loadUserImages(photo);
+      });
 
-    this.isModalOpen = true;
+
+    });
   }
 
-  handleNoMoreUsers(event: boolean) {
-    this.noMoreUsers = event;
-  }
-
-  loadUsers() {
-    this.users = [];
-    this.userId = '';
-    this.noMoreUsers = false
-    this.userService.getAllUsers(1, this.ageMin, this.ageMax, this.distanceMax).subscribe(
+  loadUserImages(id: string) {
+    this.photoService.getPhoto(id).subscribe(
       (response) => {
-        this.users = response.users;
-        this.userId = this.users[0]._id;
-        if (this.users.length == 0) {
-          this.noMoreUsers = true
-        }
+        const photo: Photo = {
+          id: id,
+          url: response.url,
+        };
+        this.profile.images.push(photo);
       },
       (error) => {
-        console.error('Erreur lors du chargement des données utilisateur:', error);
-        if (error.status == 404) {
-
-          this.noMoreUsers = true
-        }
+        console.error(
+          'Erreur lors du chargement des données utilisateur:',
+          error
+        );
       }
     );
   }
 
-  openMatch() {
-    
+  handleNewMessage(newMessage: any) {
+    console.log(newMessage)
+
+    if (newMessage.newMatch) {
+      let senderId = '';
+      newMessage.newMatch.users.forEach((user: any) => {
+        if (user != this.authService.getId()) {
+
+          senderId = user;
+        }
+
+      })
+      console.log('User id' + senderId)
+      console.log('Match id' + newMessage.newMatch._id)
+
+      this.userService.getUserProfile(senderId).subscribe((user) => {
+        this.matchName = user.user.name;
+        // this.newMatchId = newMessage.newMatch._id;
+        this.matchLink = `/chat/chatroom/${newMessage.newMatch._id}`;
+
+        this.matchPhoto = user.user.images[0];
+        this.photoService.getPhoto(user.user.images[0]).subscribe(
+          (response) => {
+            const photo: Photo = {
+              id: user.user.images[0],
+              url: response.url,
+            };
+            this.matchPhoto = photo.url;
+            this.isModalOpen = true;
+          },
+          (error) => {
+            console.error(
+              'Erreur lors du chargement des données utilisateur:',
+              error
+            );
+          });
+
+
+      })
+    }    
   }
 
-  cancel() {
-    this.modal.dismiss(null, 'cancel');
-  }
-
-  confirm() {
-    this.modal.dismiss(null, 'confirm');
-
-  }
-
-  onRangeChange(event: any) {
-    this.distanceMax = event.detail.value;
-  }
-  pinFormatter(value: number) {
-    return `${value} km`;
-  }
-  onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      if (this.ageMin) {
-        localStorage.setItem('ageMin', this.ageMin.toString())
-      }
-      if (this.ageMax) {
-        localStorage.setItem('ageMax', this.ageMax.toString())
-      }
-      if (this.distanceMax) {
-        localStorage.setItem('distanceMax', this.distanceMax.toString())
-      }
-
-      this.loadUsers();
+    handleNoMoreUsers(event: boolean) {
+      this.noMoreUsers = event;
     }
-  }
 
-}
+    loadUsers() {
+      this.users = [];
+      this.userId = '';
+      this.noMoreUsers = false
+      this.userService.getAllUsers(1, this.ageMin, this.ageMax, this.distanceMax).subscribe(
+        (response) => {
+          this.users = response.users;
+          this.userId = this.users[0]._id;
+          if (this.users.length == 0) {
+            this.noMoreUsers = true
+          }
+        },
+        (error) => {
+          console.error('Erreur lors du chargement des données utilisateur:', error);
+          if (error.status == 404) {
+
+            this.noMoreUsers = true
+          }
+        }
+      );
+    }
+
+    openMatch() {
+      this.isModalOpen = false;
+      this.modal.dismiss(null, 'cancel');
+      this.router.navigate([this.matchLink]);
+    }
+
+    cancel() {
+      this.modal.dismiss(null, 'cancel');
+    }
+
+    confirm() {
+      this.modal.dismiss(null, 'confirm');
+
+    }
+
+    onRangeChange(event: any) {
+      this.distanceMax = event.detail.value;
+    }
+    pinFormatter(value: number) {
+      return `${value} km`;
+    }
+    onWillDismiss(event: Event) {
+      const ev = event as CustomEvent<OverlayEventDetail<string>>;
+      if (ev.detail.role === 'confirm') {
+        if (this.ageMin) {
+          localStorage.setItem('ageMin', this.ageMin.toString())
+        }
+        if (this.ageMax) {
+          localStorage.setItem('ageMax', this.ageMax.toString())
+        }
+        if (this.distanceMax) {
+          localStorage.setItem('distanceMax', this.distanceMax.toString())
+        }
+
+        this.loadUsers();
+      }
+    }
+
+  }

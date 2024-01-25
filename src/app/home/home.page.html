@@ -80,13 +80,13 @@
       <ion-content class="ion-padding">
         <div class="new-match-container">
           <h1>It's a match !</h1>
-          <h2>Toi et ... avez matché !</h2>
+          <h2>Toi et {{ matchName }} avez matché !</h2>
           <div class="match-photos">
             <div class="profile-photo">
-              <img [src]="" alt="" />
+              <img [src]="profile.images[0].url" alt="" />
             </div>
             <div class="profile-photo">
-              <img [src]="" alt="" />
+              <img [src]="matchPhoto" alt="" />
             </div>
           </div>
           <ion-button

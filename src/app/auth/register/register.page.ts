@@ -4,6 +4,7 @@ import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,8 @@ export class RegisterPage implements OnInit {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private router: Router) {
+    private router: Router,
+    private userService: UserService) {
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -87,7 +89,7 @@ export class RegisterPage implements OnInit {
 
     this.authService.registerUser(registerData).subscribe(
       () => {
-        console.log('Inscription réussie!');
+        this.userService.updateUserPosition();
         this.router.navigate(['/auth/register/profile']);
       },
       (error) => {
