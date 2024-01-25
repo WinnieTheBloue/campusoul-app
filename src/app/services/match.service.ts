@@ -40,6 +40,7 @@ export class MatchService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    return this.http.post(`${this.apiUrl}/matchs/unmatch/${id}`,  { headers });
+    const options = { headers: headers };
+    return this.http.post(`${this.apiUrl}/matchs/unmatch/${id}`,  { }, options);
   }
 }
