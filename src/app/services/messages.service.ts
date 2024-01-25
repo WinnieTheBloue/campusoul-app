@@ -45,7 +45,6 @@ export class MessagesService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
-    console.log(this.authService.getToken())
     return this.http.post(`${this.apiUrl}/messages/read/${id}`, { headers });
   }
 }

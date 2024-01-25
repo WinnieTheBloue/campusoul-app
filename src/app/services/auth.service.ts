@@ -1,24 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoginData, LoginResponse } from '../auth/login/login.module'; 
+import { LoginData, LoginResponse } from '../auth/login/login.module';
 import { ApiService } from './api.service';
 
+/**
+ * Injectable service to manage authentication-related operations.
+ * This service includes functionalities like logging in a user, registering a user,
+ * setting session information, and checking if a user is logged in.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl: string; 
+  /**
+   * The base URL of the API.
+   */
+  private apiUrl: string;
 
-  constructor(private http: HttpClient, private apiService: ApiService) {
-    this.apiUrl = apiService.getApiUrl();
+  /**
+   * Constructor initializes the service with necessary dependencies.
+   * @param {HttpClient} http - The Angular HTTP client for making HTTP requests.
+   * @param {ApiService} apiService - Service for API-related functionalities.
+   */
+  constructor(private http: HttpClient, 
+    private apiService: ApiService) {
+    this.apiUrl = this.apiService.getApiUrl();
   }
 
   /**
-   * Initiates the login process by making a POST request to the server with the login data.
-   * 
-   * @param data The login data containing the user's email and password.
-   * @returns An Observable that resolves when the login process completes.
+   * Logs in a user with the given credentials.
+   * @param {LoginData} data - The login credentials.
+   * @returns {Observable<void>} An observable indicating the success or failure of the login request.
    */
   loginUser(data: LoginData): Observable<void> {
     return new Observable(observer => {
@@ -36,10 +49,9 @@ export class AuthService {
   }
 
   /**
-   * Initiates the registration process by making a POST request to the server with the registration data.
-   * 
-   * @param data The registration data containing the user's email and password.
-   * @returns An Observable that resolves when the registration process completes.
+   * Registers a new user with the given credentials.
+   * @param {LoginData} data - The registration data.
+   * @returns {Observable<void>} An observable indicating the success or failure of the registration request.
    */
   registerUser(data: LoginData): Observable<void> {
     return new Observable(observer => {
@@ -57,20 +69,17 @@ export class AuthService {
   }
 
   /**
-   * Stores the user ID and token in local storage to maintain the user's session.
-   * 
-   * @param authResult The response object from the login request.
+   * Sets the user session with the authentication result.
+   * @param {LoginResponse} authResult - The result from the login or registration request.
    */
   private setSession(authResult: LoginResponse): void {
     localStorage.setItem('id', authResult.user._id);
     localStorage.setItem('token', authResult.token);
-    // Consider additional security measures for token storage
   }
 
   /**
    * Retrieves the authentication token from local storage.
-   * 
-   * @returns The authentication token or null if not present.
+   * @returns {string | null} The authentication token or null if it doesn't exist.
    */
   getToken(): string | null {
     return localStorage.getItem('token');
@@ -78,28 +87,25 @@ export class AuthService {
 
   /**
    * Retrieves the user ID from local storage.
-   * 
-   * @returns The user ID or null if not present.
+   * @returns {string | null} The user ID or null if it doesn't exist.
    */
   getId(): string | null {
     return localStorage.getItem('id');
   }
 
   /**
-   * Checks if the user is logged in by verifying the presence of the authentication token.
-   * 
-   * @returns True if the user is logged in, false otherwise.
+   * Checks if the user is logged in based on the presence of an authentication token.
+   * @returns {boolean} True if the user is logged in, false otherwise.
    */
   isLoggedIn(): boolean {
     return this.getToken() !== null;
   }
 
   /**
-   * Logs the user out by clearing the user ID and token from local storage and the service.
+   * Logs out the user by removing the user ID and token from local storage.
    */
   logout(): void {
     localStorage.removeItem('id');
     localStorage.removeItem('token');
-    // If you're using BehaviorSubjects or any Observables to represent the login state, update them here
   }
 }
