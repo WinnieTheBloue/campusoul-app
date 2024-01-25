@@ -11,13 +11,13 @@
       <div class="infos">
 
         <a [routerLink]="['/chat/chatroom', match.matchId]" class="texts">
-
-          <h2>{{match.name}}</h2>
-          <p>
-            <ion-icon *ngIf="match.lastMsgSender == match.id" name="return-up-forward-outline"></ion-icon>
-            {{match.lastMsg}}
-          </p>
+            <h2>{{match.name}}</h2>
+            <p>
+              <ion-icon *ngIf="match.lastMsgSender == match.id" name="return-up-forward-outline"></ion-icon>
+              {{match.lastMsg}}
+            </p>
         </a>
+        <ion-badge *ngIf="match.lastMsgSender != userId">{{ match.unreadMessages }}</ion-badge>
         <div class="options">
           <ion-button expand="block" (click)="presentActionSheet(match.matchId)"><ion-icon
               name="ellipsis-horizontal-outline"></ion-icon></ion-button>

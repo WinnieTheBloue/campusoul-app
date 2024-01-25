@@ -129,7 +129,6 @@ export class ChatPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.messageService.getLastMessage(id).subscribe(
         (response) => {
-          console.log(response)
           resolve(response);
         },
         (error) => {
@@ -144,7 +143,6 @@ export class ChatPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.messageService.getTotalUnreadMessages(id).subscribe(
         (response) => {
-          console.log(response)
           resolve(response);
         },
         (error) => {
