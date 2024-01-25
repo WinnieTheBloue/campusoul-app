@@ -10,16 +10,51 @@
 <ion-content [fullscreen]="true">
   <div class="form-container">
     <div class="interests-container">
-      <div *ngFor="let interest of interests">
-        <ion-chip (click)="toggleInterest(interest)" [id]="interest.id" *ngIf="isSelected(interest)">
-          {{ interest.name }}
-        </ion-chip>
-        <ion-chip (click)="toggleInterest(interest)" [id]="interest.id" [outline]="true" *ngIf="!isSelected(interest)">
-          {{ interest.name }}
-        </ion-chip>
+      <div *ngFor="let interest of interests; index as i">
+        <span *ngIf="i < maxInterests && i > minInterests">
+          <ion-chip
+            (click)="toggleInterest(interest)"
+            [id]="interest.id"
+            *ngIf="isSelected(interest)"
+          >
+            {{ interest.name }}
+          </ion-chip>
+          <ion-chip
+            (click)="toggleInterest(interest)"
+            [id]="interest.id"
+            [outline]="true"
+            *ngIf="!isSelected(interest)"
+          >
+            {{ interest.name }}
+          </ion-chip>
+        </span>
+      </div>
+      <div class="buttons">
+        <ion-button
+          fill="clear"
+          slot="icon-only"
+          (click)="minInterests = minInterests -10; maxInterests = maxInterests -10"
+          [disabled]="minInterests == 0"
+        >
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="clear"
+          slot="icon-only"
+          (click)="minInterests = minInterests +10; maxInterests = maxInterests +10"
+          [disabled]="maxInterests >= interests.length - 1"
+        >
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </ion-button>
       </div>
     </div>
     <div class="interests-sum">{{ selectedInterests.length }}/3</div>
-    <ion-button (click)="submitInterests()" expand="block" color="primary" type="submit">Enregistrer</ion-button>
+    <ion-button
+      (click)="submitInterests()"
+      expand="block"
+      color="primary"
+      type="submit"
+      >Enregistrer</ion-button
+    >
   </div>
 </ion-content>

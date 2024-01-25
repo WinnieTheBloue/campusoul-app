@@ -65,7 +65,6 @@ export class PhotosPage implements OnInit {
     if (file) {
       this.photoService.uploadPhoto(file).subscribe(
         (response) => {
-          console.log('Photo uploadée avec succès:', response);
           this.loadUserPhotos();
         },
         (error) => {
@@ -78,7 +77,6 @@ export class PhotosPage implements OnInit {
   deletePhoto(id: string): void {
     this.photoService.deletePhoto(id).subscribe(
       (response) => {
-        console.log('Photo supprimée avec succès:', response);
         this.loadUserPhotos();
       },
       (error) => {
@@ -102,7 +100,6 @@ export class PhotosPage implements OnInit {
             } catch (error) {
               console.error('Gallery error:', error);
             }
-            console.log('Image Selected from Gallery');
           }
         },
         {
@@ -116,7 +113,6 @@ export class PhotosPage implements OnInit {
             } catch (error) {
               console.error('Camera error:', error);
             }
-            console.log('Camera Selected');
           }
         },
         {
@@ -132,7 +128,6 @@ export class PhotosPage implements OnInit {
     this.photoService.uploadPhotoFromCamera(photo).then(observable => {
       observable.subscribe(
         (response) => {
-          console.log('Photo uploaded successfully:', response);
           this.loadUserPhotos();
         },
         (error) => {

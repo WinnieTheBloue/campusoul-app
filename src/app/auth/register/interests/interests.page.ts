@@ -20,7 +20,9 @@ export class InterestsPage implements OnInit {
   interests: Interest[] = [];
   selectedInterests: Interest[] = [];
   selectedSum?: number = 0;
-
+  maxInterests = 11;
+  minInterests = 0;
+  
   constructor(private interestsService: InterestsService, private userService: UserService, private router: Router) { }
 
   ngOnInit() {
@@ -35,6 +37,7 @@ export class InterestsPage implements OnInit {
             id: interest._id,
             name: interest.name
           }));
+          this.interests.sort((a, b) => a.name.localeCompare(b.name));
         } else {
           console.error('La réponse n\'est pas dans le format attendu:', data);
         }
@@ -74,14 +77,5 @@ export class InterestsPage implements OnInit {
     });
 
     this.router.navigate(['/auth/register/photos']);
-    // this.userService.addInterestsToUser(selectedInterestIds).subscribe(
-    //   (response) => {
-    //     console.log('Intérêts ajoutés avec succès:', response);
-    //     this.router.navigate(['/auth/register/photos']); 
-    //   },
-    //   (error) => {
-    //     console.error('Erreur lors de l\'ajout des intérêts:', error);
-    //   }
-    // );
   }
 }

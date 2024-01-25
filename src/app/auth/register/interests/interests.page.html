@@ -2,21 +2,53 @@
   <img src="assets/logo/Logo.png" alt="" />
 </ion-header>
 
-
 <ion-content [fullscreen]="true" class="red">
-    <div class="buttons-group">
+  <div class="buttons-group">
     <h1>Inscription</h1>
     <div class="interests-container">
-      <div *ngFor="let interest of interests">
-        <ion-chip [id]="interest.id" (click)="toggleInterest(interest)" *ngIf="isSelected(interest)">
-          {{ interest.name }}
-        </ion-chip>
-        <ion-chip [id]="interest.id" (click)="toggleInterest(interest)" [outline]="true" *ngIf="!isSelected(interest)">
-          {{ interest.name }}
-        </ion-chip>
+      <div *ngFor="let interest of interests; index as i">
+        <span *ngIf="i < maxInterests && i > minInterests">
+          <ion-chip
+            [id]="interest.id"
+            (click)="toggleInterest(interest)"
+            *ngIf="isSelected(interest)"
+          >
+            {{ interest.name }}
+          </ion-chip>
+          <ion-chip
+            [id]="interest.id"
+            (click)="toggleInterest(interest)"
+            [outline]="true"
+            *ngIf="!isSelected(interest)"
+          >
+            {{ interest.name }}
+          </ion-chip>
+        </span>
+      </div>
+      <div class="buttons">
+        <ion-button
+          slot="icon-only"
+          (click)="minInterests = minInterests -10; maxInterests = maxInterests -10"
+          [disabled]="minInterests == 0"
+        >
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </ion-button>
+        <ion-button
+          slot="icon-only"
+          (click)="minInterests = minInterests +10; maxInterests = maxInterests +10"
+          [disabled]="maxInterests >= interests.length - 1"
+        >
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </ion-button>
       </div>
     </div>
     <div class="interests-sum">{{ selectedInterests.length }}/3</div>
-    <ion-button expand="block" color="primary" (click)="submitInterests()" type="submit">Suivant</ion-button>
+    <ion-button
+      expand="block"
+      color="primary"
+      (click)="submitInterests()"
+      type="submit"
+      >Suivant</ion-button
+    >
   </div>
 </ion-content>

@@ -22,6 +22,8 @@ export class InterestsPage implements OnInit {
   oldInterests: Interest[] = [];
   selectedSum?: number = 0;
   userId: any = this.authservice.getId();
+  maxInterests = 11;
+  minInterests = 0;
 
 
   constructor(private interestsService: InterestsService, private userService: UserService, private router: Router, private authservice: AuthService) { }
@@ -30,8 +32,6 @@ export class InterestsPage implements OnInit {
     this.loadInterests();
     this.userService.getUserProfile(this.userId).subscribe(
       (data) => {
-        //this.userInterests = data.user.interests;
-        console.log(data.user.interests)
         this.selectedInterests = data.user.interests.map((interest: any, index: any) => ({
           id: data.user.interests[index]
         }));
@@ -40,7 +40,6 @@ export class InterestsPage implements OnInit {
           id: data.user.interests[index]
         }));
 
-        console.log('Intérêts sélectionnés:', this.selectedInterests);
       },
       (error) => {
         console.error('Erreur lors du chargement du profil:', error);
@@ -56,7 +55,8 @@ export class InterestsPage implements OnInit {
             id: interest._id,
             name: interest.name
           }));
-          console.log(this.interests);
+
+          this.interests.sort((a, b) => a.name.localeCompare(b.name));
 
         } else {
           console.error('La réponse n\'est pas dans le format attendu:', data);
@@ -91,7 +91,6 @@ export class InterestsPage implements OnInit {
   
     forkJoin(deleteInterestObservables).subscribe(
       (deleteResponses) => {
-        console.log('Tous les intérêts ont été supprimés avec succès:', deleteResponses);
   
         const addInterestObservables: any[] = selectedInterestIds.map(interestId => {
           return this.userService.addInterestsToUser(interestId);
@@ -99,7 +98,6 @@ export class InterestsPage implements OnInit {
   
         forkJoin(addInterestObservables).subscribe(
           (addResponses) => {
-            console.log('Tous les intérêts ont été ajoutés avec succès:', addResponses);
             this.router.navigate(['/tabs/profile']);
           },
           (addError) => {
