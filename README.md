@@ -51,14 +51,7 @@ The Campusoul app is built using the Ionic framework with Angular, offering a cr
 For a detailed list of all dependencies and their versions, you can view the package.json file in the repository [here](https://github.com/WinnieTheBloue/campusoul-app/blob/main/package.json).
 
 ## 📝 Setup and Configuration
-1. **Clone the repository**
-
-  `git clone https://github.com/WinnieTheBloue/campusoul-app.git`
-
-  `cd campusoul-app`
-
-3. **Install dependencies**
-  `npm install`
-
-4. **Running the app**
-  `npm run start`
+1. **Clone the repository**  `git clone https://github.com/WinnieTheBloue/campusoul-app.git`
+2. **Navigate to the folder** `cd campusoul-app`
+3. **Install dependencies** `npm install`
+4. **Running the app** `npm run start`
