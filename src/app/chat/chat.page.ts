@@ -91,6 +91,9 @@ export class ChatPage implements OnInit {
       });
   }
 
+  /**
+   * Reloads the page.
+   */
   public reload(): any {
     return this.ngZone.runOutsideAngular(() => {
         location.reload()
