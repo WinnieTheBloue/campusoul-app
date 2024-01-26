@@ -36,7 +36,19 @@ export class InterestsPage implements OnInit {
   /** Message to display in case of an error or validation message. */
   errorMessage: string = '';
 
-  constructor(private interestsService: InterestsService, private userService: UserService, private router: Router) { }
+  /**
+ * Constructs the component and injects necessary dependencies.
+ * 
+ * @param {InterestsService} interestsService - Service for handling operations related to interests, such as fetching available interests or submitting user-selected interests.
+ * @param {UserService} userService - Service for handling user data and interactions, providing functionalities related to user operations such as updating user profile information.
+ * @param {Router} router - Angular's service for navigation between pages, allowing the application to route to different components based on URL.
+ */
+  constructor(
+    private interestsService: InterestsService,
+    private userService: UserService,
+    private router: Router
+  ) { }
+
 
   /** Loads interests when the component is initialized. */
   ngOnInit() {

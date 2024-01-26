@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
-import { AuthService } from '../../../services/auth.service';
 
 /**
  * Component for user profile management.
@@ -19,21 +18,26 @@ export class ProfilePage implements OnInit {
   bio?: string = "";
   errorMessage: string = '';
 
+  /**
+ * Constructs the component and injects necessary dependencies.
+ * 
+ * @param {UserService} userService - Service for handling user data and interactions, providing functionalities related to user operations.
+ * @param {Router} router - Angular's service for navigation between pages, allowing the application to route to different components based on URL.
+ */
   constructor(
     private userService: UserService,
-    private authService: AuthService,
     private router: Router
   ) { }
 
   /** Initializes the component. */
-  ngOnInit() {}
+  ngOnInit() { }
 
   /**
    * Submits the profile data after validating all inputs.
    */
   submitProfile(): void {
     this.errorMessage = '';
-    
+
     if (!this.isNameValid(this.name)) {
       this.errorMessage = 'Le nom doit être renseigné et ne doit pas dépasser 20 caractères.';
       return;
@@ -58,7 +62,7 @@ export class ProfilePage implements OnInit {
     this.userService.updateUserProfile(profileData).subscribe(
       (response) => {
         localStorage.setItem('profileIsValid', "true");
-        this.router.navigate(['/auth/register/interests']); 
+        this.router.navigate(['/auth/register/interests']);
       },
       (error) => {
         console.error('Erreur lors de la mise à jour du profil:', error);
