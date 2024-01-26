@@ -28,6 +28,28 @@ The Campusoul app is built using the Ionic framework with Angular, offering a cr
 - **RxJS and observables :** Manages asynchronous data streams and event handling.
 - **Angular services and dependency injection :** Ensures a modular and maintainable codebase, facilitating API interactions and state management.
 
+### Dependencies
+
+- **Angular :** A platform for building mobile and desktop web applications.
+- **Awesome Cordova Plugins :** A set of plugins for Cordova and Ionic applications.
+- **Capacitor :** A cross-platform native runtime for web apps.
+- **Ionic Angular :** An integration of Ionic with Angular for building mobile applications.
+- **RxJS :** A library for reactive programming using observables.
+- **tslib :** A runtime library for TypeScript.
+- **zone.js :"" An execution context for JavaScript, used by Angular.
+
+### DevDependencies
+
+- **Angular DevKit :** Tools and libraries for Angular development.
+- **Angular ESLint :** Linting tools for Angular projects.
+- **Capacitor CLI :** Command-line interface for Capacitor.
+- **Ionic Angular Toolkit :** Utilities for Ionic Angular projects.
+- **Jasmine :"" A testing framework for JavaScript.
+- **Karma :"" A test runner for JavaScript.
+- **TypeScript :** A superset of JavaScript that compiles to clean JavaScript output.
+
+For a detailed list of all dependencies and their versions, you can view the package.json file in the repository [here](https://github.com/WinnieTheBloue/campusoul-app/blob/main/package.json).
+
 ## 📝 Setup and Configuration
 1. **Clone the repository**
 `git clone https://github.com/WinnieTheBloue/campusoul-app.git`
