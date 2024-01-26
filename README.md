@@ -53,10 +53,11 @@ For a detailed list of all dependencies and their versions, you can view the pac
 ## 📝 Setup and Configuration
 1. **Clone the repository**
   `git clone https://github.com/WinnieTheBloue/campusoul-app.git`
+
   `cd campusoul-app`
 
-2. **Install dependencies**
+3. **Install dependencies**
   `npm install`
 
-3. **Running the app**
+4. **Running the app**
   `npm run start`
