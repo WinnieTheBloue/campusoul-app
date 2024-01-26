@@ -1,7 +1,7 @@
 # 🎓 Campusoul App
 ## ℹ️ Overview
 
-The Campusoul app, developed as part of the DevMobil course at HEIG-VD, is a front-end counterpart to the Campusoul API. It's designed to provide an intuitive and interactive interface for students to engage in social networking activities on campus. The app integrates closely with the Campusoul API, leveraging its capabilities for user management, interest matching, and real-time messaging.
+The Campusoul app, developed as part of the DevMobil course at HEIG-VD, is a front-end counterpart to the [Campusoul API](https://github.com/WinnieTheBloue/campusoul). It's designed to provide an intuitive and interactive interface for students to engage in social networking activities on campus. The app integrates closely with the Campusoul API, leveraging its capabilities for user management, interest matching, and real-time messaging.
 ## 👥 Team
 
 - Bourgeois Kevin
