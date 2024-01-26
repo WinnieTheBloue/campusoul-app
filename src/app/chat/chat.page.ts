@@ -7,17 +7,48 @@ import { last } from 'rxjs';
 import { ActionSheetController } from '@ionic/angular';
 import { WebSocketService } from '../services/websocket.service';
 
+/**
+ * Component for managing and displaying chat matches.
+ * Handles loading matches, presenting chat options, and managing chat functionalities.
+ */
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
+  /**
+   * The array of matches to be displayed.
+   * @type {any[]}
+   */
   matches: any[] = []
+
+  /**
+   * The unique identifier of the current user.
+   * @type {any}
+   */
   userId: any = '';
 
-  constructor(private matchService: MatchService, private webSocketService: WebSocketService, private authService: AuthService, private photoService: PhotoService, private messageService: MessagesService, private actionSheetCtrl: ActionSheetController) { }
+  /**
+   * Constructs the ChatPage component and injects necessary dependencies.
+   * 
+   * @param {MatchService} matchService - Service for handling match-related operations.
+   * @param {WebSocketService} webSocketService - Service for managing WebSocket connections and communications.
+   * @param {AuthService} authService - Service for handling authentication-related functionalities.
+   * @param {PhotoService} photoService - Service for handling photo-related functionalities.
+   * @param {MessagesService} messageService - Service for handling message-related operations.
+   * @param {ActionSheetController} actionSheetCtrl - Controller for presenting a sheet of options.
+   */
+  constructor(private matchService: MatchService,
+    private webSocketService: WebSocketService,
+    private authService: AuthService,
+    private photoService: PhotoService,
+    private messageService: MessagesService,
+    private actionSheetCtrl: ActionSheetController) { }
 
+  /**
+ * On component initialization, loads the user ID, matches, and sets up WebSocket subscription for new events.
+ */
   ngOnInit() {
     this.userId = this.authService.getId();
     this.loadMatches();
@@ -26,11 +57,19 @@ export class ChatPage implements OnInit {
     });
   }
 
+  /**
+   * Event handler for new events from WebSocket.
+   * Reloads the matches when a new event occurs.
+   */
   newEvent() {
     this.matches = [];
     this.loadMatches();
   }
 
+  /**
+   * Presents an action sheet with options for a match.
+   * @param {string} matchId - The unique identifier of the match.
+   */
   async presentActionSheet(matchId: string) {
 
     const actionSheet = await this.actionSheetCtrl.create({
@@ -56,6 +95,9 @@ export class ChatPage implements OnInit {
     await actionSheet.present();
   }
 
+  /**
+   * Loads the matches and their associated last messages and unread messages count.
+   */
   async loadMatches() {
     this.matchService.getAllMatches().subscribe(
       async (response) => {
@@ -125,6 +167,11 @@ export class ChatPage implements OnInit {
     );
   }
 
+  /**
+   * Retrieves the last message for a given match.
+   * @param {string} id - The unique identifier of the match.
+   * @returns {Promise<any>} A promise that resolves with the last message or rejects with an error.
+   */
   getLastMessage(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.messageService.getLastMessage(id).subscribe(
@@ -139,6 +186,11 @@ export class ChatPage implements OnInit {
     });
   }
 
+  /**
+   * Retrieves the total count of unread messages for a given match.
+   * @param {string} id - The unique identifier of the match.
+   * @returns {Promise<any>} A promise that resolves with the total unread messages count or rejects with an error.
+   */
   getTotalUnreadMessages(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.messageService.getTotalUnreadMessages(id).subscribe(
@@ -153,6 +205,11 @@ export class ChatPage implements OnInit {
     });
   }
 
+  /**
+   * Loads a user's photo by its ID.
+   * @param {string} id - The ID of the photo to load.
+   * @returns {Promise<any>} A promise that resolves with the photo URL or rejects with an error.
+   */
   loadUserPhoto(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.photoService.getPhoto(id).subscribe(
@@ -167,6 +224,11 @@ export class ChatPage implements OnInit {
     });
   }
 
+  /**
+   * Deletes a match by its ID.
+   * @param {string} matchId - The unique identifier of the match to delete.
+   * @returns {Promise<any>} A promise that resolves upon successful deletion or rejects with an error.
+   */
   deleteMatch(matchId: string) {
     return new Promise((resolve, reject) => {
       this.matchService.unMatch(matchId).subscribe(

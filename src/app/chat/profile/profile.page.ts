@@ -16,6 +16,7 @@ export class ProfilePage implements OnInit {
    * @type {any}
    */
   user: any;
+  link: string = "/chat/chatroom/";
 
   /**
    * Constructs the ProfilePage component and injects necessary dependencies.
@@ -30,6 +31,7 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.user = params['id'];
+      this.link += this.user;
     });
   }
 }
