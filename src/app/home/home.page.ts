@@ -23,20 +23,78 @@ interface Photo {
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  userId: any = ""
-  users: any = []
-  noMoreUsers: boolean = false
+  /** 
+ * The unique identifier of the current user.
+ * @type {string} 
+ */
+  userId: string = "";
+
+  /** 
+   * The array of users to display based on the search criteria.
+   * @type {any[]} 
+   */
+  users: any[] = [];
+
+  /** 
+   * A flag indicating whether there are no more users to display.
+   * @type {boolean} 
+   */
+  noMoreUsers: boolean = false;
+
+  /** 
+   * The minimum age filter for searching users.
+   * @type {number} 
+   */
   ageMin: number = 18;
+
+  /** 
+   * The maximum age filter for searching users.
+   * @type {number} 
+   */
   ageMax: number = 30;
+
+  /** 
+   * The maximum distance filter for searching users.
+   * @type {number} 
+   */
   distanceMax: number = 20;
+
+  /** 
+   * Indicates whether the page is currently loading data.
+   * @type {boolean} 
+   */
   isLoading: boolean = true;
+
+  /** 
+   * The link to the chat room for a matched user.
+   * @type {string} 
+   */
   matchLink: string = "";
+
+  /** 
+   * Indicates whether the match modal is currently open.
+   * @type {boolean} 
+   */
   isModalOpen: boolean = false;
-  profile: any = {}
 
+  /** 
+   * The profile information of the current user.
+   * @type {any} 
+   */
+  profile: any = {};
 
+  /** 
+   * The name of the matched user.
+   * @type {string} 
+   */
   matchName: string = "";
+
+  /** 
+   * The photo URL of the matched user.
+   * @type {string} 
+   */
   matchPhoto: string = "";
+
 
   /**
  * Constructs the HomePage component and injects necessary dependencies.
