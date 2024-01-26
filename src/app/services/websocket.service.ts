@@ -43,15 +43,18 @@ export class WebSocketService {
 
     this.socket.addEventListener('message', (event) => {
       const message = JSON.parse(event.data);
-
+      const currentUrl = this.router.url;
+      
       if (message.newChatMessage) {
         if (message.newChatMessage.sender != this.authService.getId()) {
           if (message.newChatMessage.receiver == this.authService.getId()) {
-            this.userService.getUserProfile(message.newChatMessage.sender).subscribe((user) => {
-              const sender = user.user.name;
+            if(currentUrl != `/chat/chatroom/${message.newChatMessage.match}`) {
+              this.userService.getUserProfile(message.newChatMessage.sender).subscribe((user) => {
+                const sender = user.user.name;
 
-              this.presentToast(message.newChatMessage.content, message.newChatMessage.match, sender);
-            });
+                this.presentToast(message.newChatMessage.content, message.newChatMessage.match, sender);
+              });
+            }
           }
         }
       }

@@ -3,9 +3,12 @@ import { MatchService } from '../services/match.service';
 import { AuthService } from '../services/auth.service';
 import { PhotoService } from '../services/photo.service';
 import { MessagesService } from '../services/messages.service';
-import { last } from 'rxjs';
 import { ActionSheetController } from '@ionic/angular';
 import { WebSocketService } from '../services/websocket.service';
+import { Router, RoutesRecognized } from '@angular/router';
+import { filter, pairwise } from 'rxjs/operators';
+import { Location } from '@angular/common';
+import { NgZone } from '@angular/core';
 
 /**
  * Component for managing and displaying chat matches.
@@ -21,7 +24,7 @@ export class ChatPage implements OnInit {
    * The array of matches to be displayed.
    * @type {any[]}
    */
-  matches: any[] = []
+  matches: any[] = [];
 
   /**
    * The unique identifier of the current user.
@@ -31,24 +34,32 @@ export class ChatPage implements OnInit {
 
   /**
    * Constructs the ChatPage component and injects necessary dependencies.
-   * 
+   *
    * @param {MatchService} matchService - Service for handling match-related operations.
    * @param {WebSocketService} webSocketService - Service for managing WebSocket connections and communications.
    * @param {AuthService} authService - Service for handling authentication-related functionalities.
    * @param {PhotoService} photoService - Service for handling photo-related functionalities.
    * @param {MessagesService} messageService - Service for handling message-related operations.
    * @param {ActionSheetController} actionSheetCtrl - Controller for presenting a sheet of options.
+   * @param {Router} router - Router for managing navigation between pages.
+   * @param {Location} location - Location for managing navigation between pages.
+   * @param {NgZone} ngZone - Angular service for managing zones.
    */
-  constructor(private matchService: MatchService,
+  constructor(
+    private matchService: MatchService,
     private webSocketService: WebSocketService,
     private authService: AuthService,
     private photoService: PhotoService,
     private messageService: MessagesService,
-    private actionSheetCtrl: ActionSheetController) { }
+    private actionSheetCtrl: ActionSheetController,
+    private router: Router,
+    private location: Location,
+    private ngZone: NgZone
+  ) {}
 
   /**
- * On component initialization, loads the user ID, matches, and sets up WebSocket subscription for new events.
- */
+   * On component initialization, loads the user ID, matches, and sets up WebSocket subscription for new events. Also sets up a router event listener to reload the matches when navigating back to the chat page.
+   */
   ngOnInit() {
     this.userId = this.authService.getId();
     this.loadMatches();
@@ -65,7 +76,24 @@ export class ChatPage implements OnInit {
           this.newEvent();
         }
       }
+    });
 
+    this.router.events
+      .pipe(
+        filter((evt: any) => evt instanceof RoutesRecognized),
+        pairwise()
+      )
+      .subscribe((events: RoutesRecognized[]) => {
+        if (events[0].urlAfterRedirects.includes('/chat/chatroom') && events[1].urlAfterRedirects.includes('/tabs/chat')) {
+          this.location.go('/tabs/chat');
+          this.reload();
+        }
+      });
+  }
+
+  public reload(): any {
+    return this.ngZone.runOutsideAngular(() => {
+        location.reload()
     });
   }
 
@@ -83,7 +111,6 @@ export class ChatPage implements OnInit {
    * @param {string} matchId - The unique identifier of the match.
    */
   async presentActionSheet(matchId: string) {
-
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Options du match',
       buttons: [
@@ -111,12 +138,13 @@ export class ChatPage implements OnInit {
    * Loads the matches and their associated last messages and unread messages count.
    */
   async loadMatches() {
-
     this.matchService.getAllMatches().subscribe(
       async (response) => {
         for (const match of response) {
           const lastMsg = await this.getLastMessage(match._id);
-          const totalUnreadMessages = await this.getTotalUnreadMessages(match._id);
+          const totalUnreadMessages = await this.getTotalUnreadMessages(
+            match._id
+          );
           let lastMsgSender = '0';
           let lastMsgContent = '';
           let lastMsgDate = '';
@@ -129,7 +157,7 @@ export class ChatPage implements OnInit {
           if (totalUnreadMessages > 0) {
             unreadMessages = totalUnreadMessages;
           }
-          let mt = {}
+          let mt = {};
           if (match.users[0]._id != this.userId) {
             const img = await this.loadUserPhoto(match.users[0].images[0]);
             mt = {
@@ -140,8 +168,8 @@ export class ChatPage implements OnInit {
               lastMsg: lastMsgContent,
               lastMsgSender: lastMsgSender,
               lastMsgDate: lastMsgDate,
-              unreadMessages: unreadMessages
-            }
+              unreadMessages: unreadMessages,
+            };
           }
           if (match.users[1]._id != this.userId) {
             const img = await this.loadUserPhoto(match.users[1].images[0]);
@@ -153,10 +181,9 @@ export class ChatPage implements OnInit {
               lastMsg: lastMsgContent,
               lastMsgSender: lastMsgSender,
               lastMsgDate: lastMsgDate,
-              unreadMessages: unreadMessages
-            }
+              unreadMessages: unreadMessages,
+            };
           }
-
           this.matches.push(mt);
         }
         this.matches.sort((a, b) => {
@@ -171,11 +198,12 @@ export class ChatPage implements OnInit {
             return 0;
           }
         });
-
-
       },
       (error) => {
-        console.error('Erreur lors du chargement des données utilisateur:', error);
+        console.error(
+          'Erreur lors du chargement des données utilisateur:',
+          error
+        );
       }
     );
   }
@@ -192,7 +220,10 @@ export class ChatPage implements OnInit {
           resolve(response);
         },
         (error) => {
-          console.error('Erreur lors du chargement des données utilisateur:', error);
+          console.error(
+            'Erreur lors du chargement des données utilisateur:',
+            error
+          );
           reject(error);
         }
       );
@@ -211,7 +242,10 @@ export class ChatPage implements OnInit {
           resolve(response);
         },
         (error) => {
-          console.error('Erreur lors du chargement des données utilisateur:', error);
+          console.error(
+            'Erreur lors du chargement des données utilisateur:',
+            error
+          );
           reject(error);
         }
       );
@@ -230,7 +264,10 @@ export class ChatPage implements OnInit {
           resolve(response.url);
         },
         (error) => {
-          console.error('Erreur lors du chargement des données utilisateur:', error);
+          console.error(
+            'Erreur lors du chargement des données utilisateur:',
+            error
+          );
           reject(error);
         }
       );
@@ -251,7 +288,10 @@ export class ChatPage implements OnInit {
           resolve(response);
         },
         (error) => {
-          console.error('Erreur lors du chargement des données utilisateur:', error);
+          console.error(
+            'Erreur lors du chargement des données utilisateur:',
+            error
+          );
           reject(error);
         }
       );
