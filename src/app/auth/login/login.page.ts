@@ -70,7 +70,8 @@ export class LoginPage implements OnInit {
         },
         (error) => {
           console.error('Error during login:', error);
-          this.errorMessage = `Erreur lors de la connexion: ${error.message}`;
+          this.errorMessage = `Les données fournies sont invalides`;
+          this.loginForm.reset();
         }
       );
   }

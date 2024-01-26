@@ -179,7 +179,8 @@ export class ChatroomPage implements OnInit {
     if (!this.message) return console.error('Message vide')
     const body = {
       matchId: this.matchId,
-      content: this.message
+      content: this.message,
+      receiver: this.match.id
     }
     this.messagesService.sendMessage(body).subscribe(
       (response) => {

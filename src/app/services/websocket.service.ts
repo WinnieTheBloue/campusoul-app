@@ -44,25 +44,29 @@ export class WebSocketService {
     this.socket.addEventListener('message', (event) => {
       const message = JSON.parse(event.data);
 
-      // Handle new chat messages
       if (message.newChatMessage) {
         if (message.newChatMessage.sender != this.authService.getId()) {
-          this.userService.getUserProfile(message.newChatMessage.sender).subscribe((user) => {
-            const sender = user.user.name;
-            this.presentToast(message.newChatMessage.content, message.newChatMessage.match, sender);
-          });
-        }
-      }
-      // Handle new matches
-      if (message.newMatch) {
-        message.newMatch.users.forEach((user: any) => {
-          if (user != this.authService.getId()) {
-            this.userService.getUserProfile(user).subscribe((user) => {
+          if (message.newChatMessage.receiver == this.authService.getId()) {
+            this.userService.getUserProfile(message.newChatMessage.sender).subscribe((user) => {
               const sender = user.user.name;
-              this.presentToast('New match!', message.newMatch._id, sender);
+
+              this.presentToast(message.newChatMessage.content, message.newChatMessage.match, sender);
             });
           }
-        })
+        }
+      }
+      if (message.newMatch) {
+        if (message.newMatch.users.includes(this.authService.getId())) {
+          message.newMatch.users.forEach((user: any) => {
+            if (user != this.authService.getId()) {
+              this.userService.getUserProfile(user).subscribe((user) => {
+                const sender = user.user.name;
+
+                this.presentToast('New match!', message.newMatch._id, sender);
+              });
+            }
+          })
+        }
       }
 
       this.messagesSubject.next(message);

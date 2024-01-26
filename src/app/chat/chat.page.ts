@@ -52,8 +52,26 @@ export class ChatPage implements OnInit {
   ngOnInit() {
     this.userId = this.authService.getId();
     this.loadMatches();
+
     this.webSocketService.getMessages().subscribe((newMessage) => {
-      this.newEvent();
+      console.log(newMessage)
+      if (newMessage.newMatch) {
+        if (newMessage.newMatch.users.includes(this.authService.getId())) {
+          this.newEvent();
+        }
+      }
+
+      if (newMessage.newChatMessage) {
+        console.log(newMessage.newChatMessage)
+        console.log('???')
+        console.log(newMessage.newChatMessage.receiver)
+        console.log(this.authService.getId())
+        console.log(newMessage.newChatMessage.receiver == this.authService.getId())
+        if (newMessage.newChatMessage.receiver == this.authService.getId()) {
+          this.newEvent();
+        }
+      }
+
     });
   }
 
@@ -99,6 +117,7 @@ export class ChatPage implements OnInit {
    * Loads the matches and their associated last messages and unread messages count.
    */
   async loadMatches() {
+
     this.matchService.getAllMatches().subscribe(
       async (response) => {
         for (const match of response) {

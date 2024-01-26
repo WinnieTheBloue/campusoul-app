@@ -179,37 +179,39 @@ export class HomePage implements OnInit {
 
     if (newMessage.newMatch) {
       let senderId = '';
-      newMessage.newMatch.users.forEach((user: any) => {
-        if (user != this.authService.getId()) {
+      if (newMessage.newMatch.users.includes(this.authService.getId())) {
+        newMessage.newMatch.users.forEach((user: any) => {
+          if (user != this.authService.getId()) {
 
-          senderId = user;
-        }
+            senderId = user;
+          }
 
-      })
+        })
 
-      this.userService.getUserProfile(senderId).subscribe((user) => {
-        this.matchName = user.user.name;
-        this.matchLink = `/chat/chatroom/${newMessage.newMatch._id}`;
+        this.userService.getUserProfile(senderId).subscribe((user) => {
+          this.matchName = user.user.name;
+          this.matchLink = `/chat/chatroom/${newMessage.newMatch._id}`;
 
-        this.matchPhoto = user.user.images[0];
-        this.photoService.getPhoto(user.user.images[0]).subscribe(
-          (response) => {
-            const photo: Photo = {
-              id: user.user.images[0],
-              url: response.url,
-            };
-            this.matchPhoto = photo.url;
-            this.isModalOpen = true;
-          },
-          (error) => {
-            console.error(
-              'Erreur lors du chargement des données utilisateur:',
-              error
-            );
-          });
+          this.matchPhoto = user.user.images[0];
+          this.photoService.getPhoto(user.user.images[0]).subscribe(
+            (response) => {
+              const photo: Photo = {
+                id: user.user.images[0],
+                url: response.url,
+              };
+              this.matchPhoto = photo.url;
+              this.isModalOpen = true;
+            },
+            (error) => {
+              console.error(
+                'Erreur lors du chargement des données utilisateur:',
+                error
+              );
+            });
 
 
-      })
+        })
+      }
     }
   }
 
