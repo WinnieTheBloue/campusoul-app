@@ -52,6 +52,7 @@ For a detailed list of all dependencies and their versions, you can view the pac
 
 ## 📝 Setup and Configuration
 1. **Clone the repository**
+
   `git clone https://github.com/WinnieTheBloue/campusoul-app.git`
 
   `cd campusoul-app`
