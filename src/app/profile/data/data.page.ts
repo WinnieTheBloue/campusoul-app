@@ -22,6 +22,11 @@ export class DataPage implements OnInit {
   userId: any = '';
 
   /**
+   * Errors that may occur during the update of the user's profile data.
+   */
+  errorMessage: string = '';
+
+  /**
    * Constructor initializes the component with necessary service dependencies.
    * @param {AuthService} authService - Service for authentication-related functionalities.
    * @param {UserService} userService - Service for user-related functionalities.
@@ -52,6 +57,23 @@ export class DataPage implements OnInit {
    * Updates the user's profile data with the changes made.
    */
   updateProfile() {
+    this.errorMessage = '';
+
+    if (!this.isNameValid(this.profile.name)) {
+      this.errorMessage = 'Le nom doit être renseigné et ne doit pas dépasser 20 caractères.';
+      return;
+    }
+
+    if (!this.isAgeValid(this.profile.birthdate)) {
+      this.errorMessage = 'Vous devez avoir au moins 18 ans pour utiliser cette application.';
+      return;
+    }
+
+    if (!this.isBioValid(this.profile.bio)) {
+      this.errorMessage = 'La bio ne doit pas dépasser 250 caractères.';
+      return;
+    }
+
     const changes = {
       name: this.profile.name,
       birthdate: this.profile.birthdate,
@@ -61,5 +83,37 @@ export class DataPage implements OnInit {
     this.userService.updateUserProfile(changes).subscribe((response: any) => {
       window.location.replace("/tabs/profile");
     });
+  }
+
+  /**
+   * Validates if the name input is valid.
+   * @param name The user's name.
+   * @returns `true` if the name is valid, otherwise `false`.
+   */
+  private isNameValid(name: string | undefined): boolean {
+    return name !== undefined && name.trim().length > 0 && name.length <= 20;
+  }
+
+  /**
+   * Validates if the user is at least 18 years old.
+   * @param birthdate The user's birthdate.
+   * @returns `true` if the user is 18 or older, otherwise `false`.
+   */
+  private isAgeValid(birthdate: string | undefined): boolean {
+    if (!birthdate) return false;
+
+    const birthday = new Date(birthdate);
+    const ageDifMs = Date.now() - birthday.getTime();
+    const ageDate = new Date(ageDifMs);
+    return ageDate.getUTCFullYear() - 1970 >= 18;
+  }
+
+  /**
+   * Validates if the bio input is valid.
+   * @param bio The user's bio.
+   * @returns `true` if the bio is valid, otherwise `false`.
+   */
+  private isBioValid(bio: string | undefined): boolean {
+    return bio !== undefined && bio.length <= 250;
   }
 }

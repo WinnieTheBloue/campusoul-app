@@ -107,3 +107,9 @@ ion-header.dark {
     --background: #e3edff;
     --spinner-color: var(--ion-red-background);
 }
+.error-message p{
+    width: 100%;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    text-align: center;
+}

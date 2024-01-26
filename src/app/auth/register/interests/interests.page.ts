@@ -95,7 +95,7 @@ export class InterestsPage implements OnInit {
    * On success, navigates to the next page.
    */
   submitInterests(): void {
-    if (this.selectedInterests.length > 0) {
+    if (this.selectedInterests.length > 0 && this.selectedInterests.length <= 3) {
       const selectedInterestIds = this.selectedInterests.map(interest => interest.id);
       selectedInterestIds.forEach(interestId => {
         this.userService.addInterestsToUser(interestId).subscribe(
@@ -108,6 +108,8 @@ export class InterestsPage implements OnInit {
           }
         );
       });
+    } else if (this.selectedInterests.length > 3) {
+      this.errorMessage = 'Vous ne pouvez pas sélectionner plus de 3 intérêts.';
     } else {
       this.errorMessage = 'Veuillez sélectionner au moins un intérêt';
     }

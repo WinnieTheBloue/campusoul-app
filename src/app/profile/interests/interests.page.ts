@@ -59,6 +59,9 @@ export class InterestsPage implements OnInit {
    */
   minInterests = 0;
 
+  /** Message to display in case of an error or validation message. */
+  errorMessage: string = '';
+
   /**
    * Constructor initializes the component with necessary service dependencies.
    * @param {InterestsService} interestsService - Service for interest-related functionalities.
@@ -145,32 +148,38 @@ export class InterestsPage implements OnInit {
    * Submits the selected interests, updating the user's interests.
    */
   submitInterests(): void {
-    const selectedInterestIds = this.selectedInterests.map(interest => interest.id);
+    if (this.selectedInterests.length > 0 && this.selectedInterests.length <= 3) {
+      const selectedInterestIds = this.selectedInterests.map(interest => interest.id);
 
-    const deleteInterestObservables: any[] = this.oldInterests.map(interest => {
-      return this.interestsService.deleteUserInterest(interest.id);
-    });
+      const deleteInterestObservables: any[] = this.oldInterests.map(interest => {
+        return this.interestsService.deleteUserInterest(interest.id);
+      });
 
-    forkJoin(deleteInterestObservables).subscribe(
-      (deleteResponses) => {
+      forkJoin(deleteInterestObservables).subscribe(
+        (deleteResponses) => {
 
-        const addInterestObservables: any[] = selectedInterestIds.map(interestId => {
-          return this.userService.addInterestsToUser(interestId);
-        });
+          const addInterestObservables: any[] = selectedInterestIds.map(interestId => {
+            return this.userService.addInterestsToUser(interestId);
+          });
 
-        forkJoin(addInterestObservables).subscribe(
-          (addResponses) => {
-            this.router.navigate(['/tabs/profile']);
-          },
-          (addError) => {
-            console.error('Une erreur est survenue lors de l\'ajout des intérêts:', addError);
-          }
-        );
-      },
-      (deleteError) => {
-        console.error('Une erreur est survenue lors de la suppression des intérêts:', deleteError);
-      }
-    );
+          forkJoin(addInterestObservables).subscribe(
+            (addResponses) => {
+              this.router.navigate(['/tabs/profile']);
+            },
+            (addError) => {
+              console.error('Une erreur est survenue lors de l\'ajout des intérêts:', addError);
+            }
+          );
+        },
+        (deleteError) => {
+          console.error('Une erreur est survenue lors de la suppression des intérêts:', deleteError);
+        }
+      );
+    } else if (this.selectedInterests.length > 3) {
+      this.errorMessage = 'Vous ne pouvez pas sélectionner plus de 3 intérêts.';
+    } else {
+      this.errorMessage = 'Vous devez sélectionner au moins un intérêt.';
+    }
   }
 
 }

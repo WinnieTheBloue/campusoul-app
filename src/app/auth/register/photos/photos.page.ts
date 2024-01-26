@@ -189,7 +189,7 @@ export class PhotosPage implements OnInit {
    * Validates the number of photos before proceeding.
    */
   submitPhotos(): void {
-    if (this.photos.length > 0) {
+    if (this.photos.length > 0 && this.photos.length <= 10) {
       localStorage.setItem('photosIsValid', "true");
       this.router.navigate(['/']);
     } else if (this.photos.length > 10) {
