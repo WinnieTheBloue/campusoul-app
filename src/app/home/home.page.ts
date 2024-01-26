@@ -4,7 +4,6 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { PhotoService } from '../services/photo.service';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
-import { LoadingController } from '@ionic/angular';
 import { WebSocketService } from 'src/app/services/websocket.service';
 import { Router } from '@angular/router';
 
@@ -13,6 +12,11 @@ interface Photo {
   url: string;
 }
 
+/**
+ * Component for the home page.
+ * Manages user interactions, loads user profiles, handles new messages from WebSocket,
+ * and manages user preferences for age range and distance.
+ */
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -34,7 +38,24 @@ export class HomePage implements OnInit {
   matchName: string = "";
   matchPhoto: string = "";
 
-  constructor(private modal: ModalController, private photoService: PhotoService, private loadingCtrl: LoadingController, private userService: UserService, private authService: AuthService, private webSocketService: WebSocketService, private router: Router) { }
+  /**
+ * Constructs the HomePage component and injects necessary dependencies.
+ * 
+ * @param {ModalController} modal - Controller for presenting modal overlays.
+ * @param {PhotoService} photoService - Service for handling photo-related operations.
+ * @param {UserService} userService - Service for managing user data and interactions.
+ * @param {AuthService} authService - Service for handling authentication-related functionalities.
+ * @param {WebSocketService} webSocketService - Service for managing WebSocket connections and communications.
+ * @param {Router} router - Angular's navigation service for routing to different pages.
+ */
+  constructor(private modal: ModalController,
+    private photoService: PhotoService,
+    private userService: UserService,
+    private authService: AuthService,
+    private webSocketService: WebSocketService,
+    private router: Router) { }
+
+  /** Initializes the component, loads user preferences, user profiles, and sets up WebSocket message handling. */
   ngOnInit() {
     if (localStorage.getItem('ageMin')) {
       this.ageMin = Number(localStorage.getItem('ageMin'))
@@ -54,6 +75,9 @@ export class HomePage implements OnInit {
     });
   }
 
+  /**
+   * Loads the user's profile information.
+   */
   getUserProfile() {
     this.userService.getUserProfile(this.authService.getId()).subscribe((response: any) => {
       this.profile = response.user;
@@ -67,6 +91,10 @@ export class HomePage implements OnInit {
     });
   }
 
+  /**
+   * Loads a user's photo data by its ID.
+   * @param id The ID of the photo to load.
+   */
   loadUserImages(id: string) {
     this.photoService.getPhoto(id).subscribe(
       (response) => {
@@ -85,6 +113,10 @@ export class HomePage implements OnInit {
     );
   }
 
+  /**
+   * Handles new messages received from the WebSocket.
+   * @param newMessage The new message received.
+   */
   handleNewMessage(newMessage: any) {
 
     if (newMessage.newMatch) {
@@ -120,71 +152,103 @@ export class HomePage implements OnInit {
 
 
       })
-    }    
+    }
   }
 
-    handleNoMoreUsers(event: boolean) {
-      this.noMoreUsers = event;
-    }
+  /**
+   * Event handler when there are no more users to display.
+   * @param event Boolean indicating the event occurrence.
+   */
+  handleNoMoreUsers(event: boolean) {
+    this.noMoreUsers = event;
+  }
 
-    loadUsers() {
-      this.users = [];
-      this.userId = '';
-      this.noMoreUsers = false
-      this.userService.getAllUsers(1, this.ageMin, this.ageMax, this.distanceMax).subscribe(
-        (response) => {
-          this.users = response.users;
-          this.userId = this.users[0]._id;
-          if (this.users.length == 0) {
-            this.noMoreUsers = true
-          }
-        },
-        (error) => {
-          console.error('Erreur lors du chargement des données utilisateur:', error);
-          if (error.status == 404) {
-
-            this.noMoreUsers = true
-          }
+  /**
+   * Loads users based on the specified age and distance preferences.
+   */
+  loadUsers() {
+    this.users = [];
+    this.userId = '';
+    this.noMoreUsers = false
+    this.userService.getAllUsers(1, this.ageMin, this.ageMax, this.distanceMax).subscribe(
+      (response) => {
+        this.users = response.users;
+        this.userId = this.users[0]._id;
+        if (this.users.length == 0) {
+          this.noMoreUsers = true
         }
-      );
-    }
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des données utilisateur:', error);
+        if (error.status == 404) {
 
-    openMatch() {
-      this.isModalOpen = false;
-      this.modal.dismiss(null, 'cancel');
-      this.router.navigate([this.matchLink]);
-    }
-
-    cancel() {
-      this.modal.dismiss(null, 'cancel');
-    }
-
-    confirm() {
-      this.modal.dismiss(null, 'confirm');
-
-    }
-
-    onRangeChange(event: any) {
-      this.distanceMax = event.detail.value;
-    }
-    pinFormatter(value: number) {
-      return `${value} km`;
-    }
-    onWillDismiss(event: Event) {
-      const ev = event as CustomEvent<OverlayEventDetail<string>>;
-      if (ev.detail.role === 'confirm') {
-        if (this.ageMin) {
-          localStorage.setItem('ageMin', this.ageMin.toString())
+          this.noMoreUsers = true
         }
-        if (this.ageMax) {
-          localStorage.setItem('ageMax', this.ageMax.toString())
-        }
-        if (this.distanceMax) {
-          localStorage.setItem('distanceMax', this.distanceMax.toString())
-        }
-
-        this.loadUsers();
       }
-    }
+    );
+  }
+
+  /**
+   * Opens the match page when a match is found.
+   */
+  openMatch() {
+    this.isModalOpen = false;
+    this.modal.dismiss(null, 'cancel');
+    this.router.navigate([this.matchLink]);
+  }
+
+  /**
+   * Handles the cancellation of an action or modal.
+   */
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  /**
+  * Handles the confirmation of an action or modal.
+  */
+  confirm() {
+    this.modal.dismiss(null, 'confirm');
 
   }
+
+  /**
+  * Handles changes to the distance range slider.
+  * @param event The event containing the new slider value.
+  */
+  onRangeChange(event: any) {
+    this.distanceMax = event.detail.value;
+  }
+
+  /**
+   * Formatter for the distance range pin.
+   * @param value The value to format.
+   * @returns The formatted distance string.
+   */
+  pinFormatter(value: number) {
+    return `${value} km`;
+  }
+
+  /**
+   * Event handler for when the modal is about to be dismissed.
+   * Saves user preferences if the 'confirm' role is provided.
+   * @param event The event containing the dismissal details.
+   */
+  onWillDismiss(event: Event) {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'confirm') {
+      if (this.ageMin) {
+        localStorage.setItem('ageMin', this.ageMin.toString())
+      }
+      if (this.ageMax) {
+        localStorage.setItem('ageMax', this.ageMax.toString())
+      }
+      if (this.distanceMax) {
+        localStorage.setItem('distanceMax', this.distanceMax.toString())
+      }
+
+      this.loadUsers();
+    }
+  }
+
+}
