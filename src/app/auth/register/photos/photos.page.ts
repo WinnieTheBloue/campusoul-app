@@ -4,30 +4,60 @@ import { ActionSheetController } from '@ionic/angular';
 import { PhotoService } from '../../../services/photo.service';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
+
 interface PhotoUpld {
   id: string;
   url: string;
 }
 
-
+/**
+ * Component for managing user photos.
+ * Handles functionalities for loading, displaying, uploading, and deleting photos,
+ * as well as capturing new photos from the camera or selecting from the gallery.
+ */
 @Component({
   selector: 'app-photos',
   templateUrl: './photos.page.html',
   styleUrls: ['./photos.page.scss'],
 })
 export class PhotosPage implements OnInit {
+  /** Array of photo IDs associated with the user. */
   photosIds: any[] = [];
-  photos: PhotoUpld[] = [];
-  constructor(private actionSheet: ActionSheetController, public photoService: PhotoService, private userService: UserService, private router: Router, private authService: AuthService) { }
 
+  /** Array of photos to be displayed. */
+  photos: PhotoUpld[] = [];
+
+  /** Message to display in case of an error or validation message. */
+  errorMessage: string = '';
+
+  /**
+   * Initializes the component with necessary services.
+   * @param actionSheet Service for presenting a sheet of options.
+   * @param photoService Service for photo management.
+   * @param userService Service for user data management.
+   * @param router Router for navigation.
+   * @param authService Service for authentication processes.
+   */
+  constructor(
+    private actionSheet: ActionSheetController,
+    public photoService: PhotoService,
+    private userService: UserService,
+    private router: Router,
+    private authService: AuthService
+  ) { }
+
+  /** Loads user photos when the component is initialized. */
   ngOnInit() {
     this.loadUserPhotos();
   }
 
-
+  /**
+   * Loads the photos associated with the user.
+   * Fetches photo IDs from the user profile and then loads each photo's data.
+   */
   loadUserPhotos(): void {
-    this.photosIds = []
-    this.photos = []
+    this.photosIds = [];
+    this.photos = [];
     this.userService.getUserProfile(this.authService.getId()).subscribe(
       (response) => {
         this.photosIds = response.user.images;
@@ -41,6 +71,10 @@ export class PhotosPage implements OnInit {
     );
   }
 
+  /**
+   * Loads data for a specific photo by its ID.
+   * @param id The ID of the photo to load.
+   */
   loadPhotoData(id: string): void {
     this.photoService.getPhoto(id).subscribe(
       (response) => {
@@ -56,12 +90,15 @@ export class PhotosPage implements OnInit {
     );
   }
 
-  newPhoto(event: any) {
+  /**
+   * Handles the process of uploading a new photo.
+   * @param event Event containing the photo file to upload.
+   */
+  newPhoto(event: any): void {
     const file = event.target.files[0];
     if (file) {
       this.photoService.uploadPhoto(file).subscribe(
         (response) => {
-          console.log('Photo uploadée avec succès:', response);
           this.loadUserPhotos();
         },
         (error) => {
@@ -71,11 +108,14 @@ export class PhotosPage implements OnInit {
     }
   }
 
+  /**
+   * Deletes a photo by its ID.
+   * @param id The ID of the photo to delete.
+   */
   deletePhoto(id: string): void {
     this.photoService.deletePhoto(id).subscribe(
       (response) => {
-        console.log('Photo supprimée avec succès:', response); 
-        this.loadUserPhotos(); 
+        this.loadUserPhotos();
       },
       (error) => {
         console.error('Erreur lors de la suppression de la photo:', error);
@@ -83,6 +123,9 @@ export class PhotosPage implements OnInit {
     );
   }
 
+  /**
+   * Presents options for selecting a new image either from the gallery or by using the camera.
+   */
   async selectimageOptions() {
     const actionSheet = await this.actionSheet.create({
       header: 'Selectionner un image',
@@ -98,7 +141,6 @@ export class PhotosPage implements OnInit {
             } catch (error) {
               console.error('Gallery error:', error);
             }
-            console.log('Image Selected from Gallery');
           }
         },
         {
@@ -112,7 +154,6 @@ export class PhotosPage implements OnInit {
             } catch (error) {
               console.error('Camera error:', error);
             }
-            console.log('Camera Selected');
           }
         },
         {
@@ -124,11 +165,14 @@ export class PhotosPage implements OnInit {
     await actionSheet.present();
   }
 
+  /**
+   * Uploads a photo taken from the camera.
+   * @param photo The photo taken from the camera.
+   */
   private uploadPhotoFromCamera(photo: any) {
     this.photoService.uploadPhotoFromCamera(photo).then(observable => {
       observable.subscribe(
         (response) => {
-          console.log('Photo uploaded successfully:', response);
           this.loadUserPhotos();
         },
         (error) => {
@@ -140,7 +184,18 @@ export class PhotosPage implements OnInit {
     });
   }
 
+  /**
+   * Submits the photos.
+   * Validates the number of photos before proceeding.
+   */
   submitPhotos(): void {
-    this.router.navigate(['/']);
+    if (this.photos.length > 0) {
+      localStorage.setItem('photosIsValid', "true");
+      this.router.navigate(['/']);
+    } else if (this.photos.length > 10) {
+      this.errorMessage = 'Vous ne pouvez pas ajouter plus de 10 photos';
+    } else {
+      this.errorMessage = 'Veuillez ajouter au moins une photo';
+    }
   }
 }

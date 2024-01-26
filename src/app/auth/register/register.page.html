@@ -41,6 +41,9 @@
         <ion-button expand="block" color="primary" type="submit"
           >Suivant</ion-button
         >
+        <ion-button color="secondary" routerLink="/auth/login" expand="block"
+          >Se connecter</ion-button
+        >
       </div>
     </form>
     <div *ngIf="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>

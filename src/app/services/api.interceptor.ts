@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { LoadingService } from './loading.service';
 import { AuthService } from './auth.service';
+import { AlertController } from '@ionic/angular';
 
 /**
  * Injectable HTTP interceptor to handle and modify HTTP requests and responses.
@@ -18,7 +19,8 @@ export class ApiInterceptor implements HttpInterceptor {
    * @param {AuthService} authService - Service for authentication-related functionalities.
    */
   constructor(private loadingService: LoadingService, 
-    private authService: AuthService) {}
+    private authService: AuthService,
+    private alertController: AlertController) {}
 
   /**
    * Intercepts HTTP requests and adds functionality to show and hide loading indicators,
@@ -34,6 +36,13 @@ export class ApiInterceptor implements HttpInterceptor {
         this.loadingService.hideLoading();
         if (err.status === 401) {
           this.authService.logout();
+        }
+        if (err.status === 500 || err.status === 400) {
+          this.alertController.create({
+            header: 'Erreur',
+            message: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+            buttons: ['OK']
+          }).then(alert => alert.present());
         }
         return throwError(err);
       }),

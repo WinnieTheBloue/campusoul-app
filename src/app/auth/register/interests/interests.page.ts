@@ -7,28 +7,45 @@ interface Interest {
   id: string;
   name: string;
 }
-interface InterestsResponse {
-  interests: { _id: string; name: string }[];
-}
 
+/**
+ * Component for managing user interests.
+ * Allows users to select and submit their interests.
+ */
 @Component({
   selector: 'app-interests',
   templateUrl: './interests.page.html',
   styleUrls: ['./interests.page.scss'],
 })
 export class InterestsPage implements OnInit {
+  /** List of all available interests. */
   interests: Interest[] = [];
+
+  /** List of interests selected by the user. */
   selectedInterests: Interest[] = [];
+
+  /** The total number of interests selected by the user. */
   selectedSum?: number = 0;
+
+  /** The maximum index of interests a user can see. */
   maxInterests = 11;
+
+  /** The minimum index of interests a user can see. */
   minInterests = 0;
-  
+
+  /** Message to display in case of an error or validation message. */
+  errorMessage: string = '';
+
   constructor(private interestsService: InterestsService, private userService: UserService, private router: Router) { }
 
+  /** Loads interests when the component is initialized. */
   ngOnInit() {
     this.loadInterests();
   }
 
+  /**
+   * Fetches interests from the `InterestsService` and assigns them to the `interests` property.
+   */
   loadInterests(): void {
     this.interestsService.getInterests().subscribe(
       (data) => {
@@ -48,10 +65,20 @@ export class InterestsPage implements OnInit {
     );
   }
 
+  /**
+   * Checks if an interest is selected.
+   * @param interest The interest to check.
+   * @returns `true` if the interest is selected, otherwise `false`.
+   */
   isSelected(interest: Interest): boolean {
     return this.selectedInterests.some(selectedInterest => selectedInterest.id === interest.id);
   }
 
+  /**
+   * Toggles the selection state of an interest.
+   * If the interest is already selected, it gets deselected, and vice versa.
+   * @param interest The interest to toggle.
+   */
   toggleInterest(interest: Interest): void {
     const index = this.selectedInterests.findIndex(selectedInterest => selectedInterest.id === interest.id);
     if (index >= 0) {
@@ -62,20 +89,27 @@ export class InterestsPage implements OnInit {
     this.selectedSum = this.selectedInterests.length;
   }
 
+  /**
+   * Submits the selected interests to the server.
+   * If no interests are selected, sets an error message.
+   * On success, navigates to the next page.
+   */
   submitInterests(): void {
-    const selectedInterestIds = this.selectedInterests.map(interest => interest.id);
-    console.log('Intérêts sélectionnés:', selectedInterestIds);
-    selectedInterestIds.forEach(interestId => {
-      this.userService.addInterestsToUser(interestId).subscribe(
-        (response) => {
-          console.log('Intérêts ajoutés avec succès:', response);
-        },
-        (error) => {
-          console.error('Erreur lors de l\'ajout des intérêts:', error);
-        }
-      );
-    });
-
-    this.router.navigate(['/auth/register/photos']);
+    if (this.selectedInterests.length > 0) {
+      const selectedInterestIds = this.selectedInterests.map(interest => interest.id);
+      selectedInterestIds.forEach(interestId => {
+        this.userService.addInterestsToUser(interestId).subscribe(
+          (response) => {
+            localStorage.setItem('interestsIsValid', "true");
+            this.router.navigate(['/auth/register/photos']);
+          },
+          (error) => {
+            console.error('Erreur lors de l\'ajout des intérêts:', error);
+          }
+        );
+      });
+    } else {
+      this.errorMessage = 'Veuillez sélectionner au moins un intérêt';
+    }
   }
 }

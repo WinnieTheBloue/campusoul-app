@@ -1,20 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ApiService } from '../../services/api.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from '../../services/user.service';
 
+/**
+ * Component for user registration.
+ * Handles user inputs, validates the form, and communicates with the AuthService for registration.
+ */
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
+  /** Form group for the registration inputs. */
   registerForm: FormGroup;
+
+  /** Message to display in case of an error or validation message. */
   errorMessage: string = "";
 
+  /**
+   * Initializes the component with necessary services and form structure.
+   * @param authService Service for authentication processes.
+   * @param formBuilder Service to create reactive forms.
+   * @param router Router for navigation.
+   * @param userService Service to manage user data.
+   */
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -27,65 +39,55 @@ export class RegisterPage implements OnInit {
     });
   }
 
+  /** Initializes the component. */
   ngOnInit() {
   }
 
+  /**
+   * Handles the registration process.
+   * Validates the form inputs, checks password criteria, and uses AuthService to register the user.
+   */
   register(): void {
     if (this.registerForm.invalid) {
       this.errorMessage = "Les données fournies sont invalides";
       return;
     }
-    if (this.registerForm.value.password.length < 8) {
+
+    const password = this.registerForm.value.password;
+    const confirmPassword = this.registerForm.value.confirmPassword;
+
+    if (password.length < 8) {
       this.errorMessage = "Le mot de passe doit contenir au moins 8 caractères.";
-
       return;
-    }
-    
-    this.errorMessage = "";
-
-    if (this.registerForm.value.password.length > 20) {
+    } else if (password.length > 20) {
       this.errorMessage = "Le mot de passe ne doit pas contenir plus de 20 caractères.";
-
       return;
     }
 
-    this.errorMessage = "";
-
-    if (this.registerForm.value.password.search(/\d/) == -1) {
+    if (password.search(/\d/) === -1) {
       this.errorMessage = "Le mot de passe doit contenir au moins un chiffre.";
-
       return;
     }
 
-    this.errorMessage = "";
-
-    if (this.registerForm.value.password.search(/[a-zA-Z]/) == -1) {
+    if (password.search(/[a-zA-Z]/) === -1) {
       this.errorMessage = "Le mot de passe doit contenir au moins une lettre.";
-
       return;
     }
 
-    this.errorMessage = "";
-
-    if (this.registerForm.value.password.search(/[^a-zA-Z0-9\-\/]/) == -1) {
+    if (password.search(/[^a-zA-Z0-9\-\/]/) === -1) {
       this.errorMessage = "Le mot de passe doit contenir au moins un caractère spécial.";
-
       return;
     }
 
-    this.errorMessage = "";
-
-    if(this.registerForm.value.password !== this.registerForm.value.confirmPassword){
+    if (password !== confirmPassword) {
       this.errorMessage = "Les mots de passe ne correspondent pas.";
       return;
     }
 
-    this.errorMessage = "";
-
-    delete this.registerForm.value.confirmPassword;
-    const registerData = this.registerForm.value;
-
-
+    const registerData = {
+      email: this.registerForm.value.email,
+      password: password
+    };
 
     this.authService.registerUser(registerData).subscribe(
       () => {
